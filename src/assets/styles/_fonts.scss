@@ -1,0 +1,30 @@
+@mixin MakeFont($base-font-path: "") {
+  $font-family: "ResistSansText";
+
+  $fonts: (
+    Light: 300,
+    Regular: 400,
+    Medium: 500,
+    Bold: 700,
+  );
+
+  @each $font, $weight in $fonts {
+    $font-with-dash: #{$font-family}-#{$font};
+    $font-with-space: #{$font-family} #{$font};
+    $font-with-path: #{$base-font-path}/#{$font-with-dash};
+
+    @font-face {
+      font-family: "Resist Sans Text";
+      src: url("#{$font-with-path}.eot");
+      src: local("#{$font-with-dash}"), local("#{$font-with-space}"),
+        url("#{$font-with-path}.eot?#iefix") format("embedded-opentype"),
+        url("#{$font-with-path}.woff2") format("woff2"),
+        url("#{$font-with-path}.woff") format("woff"),
+        url("#{$font-with-path}.ttf") format("truetype");
+      font-weight: $weight;
+      font-style: normal;
+    }
+  }
+}
+
+@include MakeFont("@/assets/fonts");
