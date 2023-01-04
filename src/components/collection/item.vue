@@ -19,7 +19,14 @@ const description = computed(() => {
 
 <template>
   <article class="movie">
-    <div class="preview"></div>
+    <div class="preview">
+      <div class="background-container">
+        <img class="background" loading="lazy" v-if="poster" :src="poster" />
+      </div>
+      <div class="icons">
+        <FrmRating :rating="rating" v-if="rating" />
+      </div>
+    </div>
     <div class="information">
       <h4 class="title">
         {{ title }}
@@ -42,14 +49,35 @@ $height-preview: calc(
   flex-direction: column;
   row-gap: 0.9em;
 }
-
 .preview {
   width: 100%;
   height: $height-preview;
-  padding: 1em;
   border-radius: $border-radius;
   overflow: hidden;
   background-color: $background-loading-preview;
+  position: relative;
+}
+.background-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.background {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.icons {
+  position: relative;
+  width: 100%;
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  row-gap: 0.375em;
+  z-index: 2;
 }
 .information {
   display: flex;

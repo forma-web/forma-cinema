@@ -11,7 +11,7 @@ const { title, movies } = defineProps<TCollection>();
 
 <template>
   <div class="block">
-    <h3 class="title">{{ title }}</h3>
+    <h3 class="title" v-if="title">{{ title }}</h3>
     <div class="list">
       <CollectionItem
         v-for="movie in movies"
