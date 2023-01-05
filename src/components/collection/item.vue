@@ -4,17 +4,10 @@ import { TMovie } from '@/types/collection';
 const { movie } = defineProps<{ movie: TMovie }>();
 const { name, year, genres, isSerial, kinopoisk_rating, poster } = movie;
 
-const description = computed(() => {
-  const params = [];
-  if (year !== undefined) {
-    const yearParam = isSerial ? `c ${year}` : year;
-    params.push(yearParam);
-  }
-  if (genres !== undefined) {
-    params.push(...genres.map((genre) => genre.toLowerCase()));
-  }
-  return params.join(', ');
-});
+const description = formatMovieDetails(
+  formatYearDetail(year, isSerial),
+  genres
+);
 </script>
 
 <template>

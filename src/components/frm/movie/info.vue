@@ -15,7 +15,7 @@ const detailsData = typeof details === 'string' ? [details] : details;
         {{ name }}
       </h4>
       <div class="features">
-        <slot />
+        <slot></slot>
       </div>
     </div>
     <div class="description" v-if="details">

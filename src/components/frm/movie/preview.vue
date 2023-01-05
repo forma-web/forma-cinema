@@ -8,26 +8,39 @@ const { poster } = defineProps<TPreview>();
 
 <template>
   <div class="preview">
-    <div class="background-container">
-      <img class="background" loading="lazy" v-if="poster" :src="poster" />
-    </div>
-    <div class="icons">
-      <slot />
+    <div class="preview__content">
+      <div class="background-container">
+        <img class="background" loading="lazy" v-if="poster" :src="poster" />
+      </div>
+      <div class="icons">
+        <slot></slot>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-$height-preview: calc(
-  (100vw - ($movies-in-collection - 1) * 1em) * 9 / ($movies-in-collection * 16)
-);
 .preview {
   width: 100%;
-  height: $height-preview;
   overflow: hidden;
   background-color: $background-loading-preview;
   position: relative;
+
+  &::before {
+    content: '';
+    display: block;
+    padding-top: 56.25%;
+  }
+
+  &__content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
+
 .background-container {
   position: absolute;
   top: 0;

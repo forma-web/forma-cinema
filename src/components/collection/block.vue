@@ -5,6 +5,8 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 import { vIntersectionObserver } from '@vueuse/components';
 
 const root = ref<HTMLElement | null>(null);
+const activeMoviePreview = ref<TMovie | null>(null);
+
 const { width: widthWindow } = useWindowSize();
 const { width } = useElementSize(root);
 
@@ -36,6 +38,8 @@ const { title, movies, oneRow } = defineProps<TCollection>();
         <li
           class="item"
           v-for="movie in movies"
+          @mouseleave="activeMoviePreview = null"
+          @mouseenter="activeMoviePreview = movie"
           v-intersection-observer="[
             onIntersectionObserver,
             { root, threshold: 1 },
@@ -43,6 +47,10 @@ const { title, movies, oneRow } = defineProps<TCollection>();
         >
           <CollectionItem :key="movie.id" :movie="movie" />
         </li>
+        <CollectionPreview
+          v-if="activeMoviePreview"
+          :movie="activeMoviePreview"
+        />
       </ul>
       <button
         v-if="oneRow"
@@ -65,9 +73,6 @@ const { title, movies, oneRow } = defineProps<TCollection>();
 </template>
 
 <style scoped lang="scss">
-$width-item: calc(
-  (100% - ($movies-in-collection - 1) * 1em) / $movies-in-collection
-);
 .block {
   width: 100%;
   position: relative;
@@ -117,7 +122,6 @@ $width-item: calc(
   width: 100%;
   display: flex;
   padding: 0 $padding-wrapper;
-  grid-template-columns: repeat($movies-in-collection, $width-item);
   flex-wrap: wrap;
   column-gap: 1em;
   row-gap: 2.5em;
@@ -143,7 +147,7 @@ $width-item: calc(
 
   .item {
     position: relative;
-    width: $width-item;
+    width: $width-collection-movie;
     flex-shrink: 0;
     z-index: 1;
     transition: opacity $animation-time;

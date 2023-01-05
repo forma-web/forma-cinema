@@ -3,12 +3,35 @@ import { TMovie } from '@/types/collection';
 
 const { movie } = defineProps<{ movie: TMovie }>();
 const { name, year, genres, isSerial, kinopoisk_rating, poster } = movie;
+
+const description = formatMovieDetails(
+  formatYearDetail(year, isSerial),
+  genres
+);
 </script>
 
 <template>
-  <article class="preview-movie">
-    <FrmPreview :poster="poster" />
+  <article class="promo">
+    <FrmMoviePreview :poster="poster" class="movie__preview">
+      <FrmRating :rating="kinopoisk_rating" v-if="kinopoisk_rating" />
+    </FrmMoviePreview>
+    <FrmMovieInfo :name="name" :details="description" />
   </article>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.promo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: $width-collection-movie;
+  font-size: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.9em;
+}
+
+.movie__preview {
+  border-radius: $border-radius;
+}
+</style>
