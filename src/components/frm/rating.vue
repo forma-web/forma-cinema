@@ -23,7 +23,7 @@ const { rating } = defineProps<{ rating: number }>();
   align-items: center;
   font-size: 1em;
   line-height: 1;
-  padding: 0.3em 0.5em;
+  padding: 0.3em 0.5em 0.48em;
   border-radius: 0.125em;
   font-weight: 700;
   background-color: $color-rating-neutral;

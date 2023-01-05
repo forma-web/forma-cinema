@@ -10,8 +10,12 @@ $color-rating-good: #39b026;
 $color-rating-great: linear-gradient(116.45deg, #eafb2a 0%, #e7a82e 100%);
 $font-color-rating-great: #362804;
 
-$padding-collection: 7rem;
+$padding-wrapper: 7rem;
 
 $border-radius: 0.6rem;
 
 $movies-in-collection: 4;
+
+$animation-time: 0.2s;
+$opacity: 0.6;
+$opacity-disabled: 0.4;

@@ -1,8 +1,15 @@
-export type TCollectionItem = {
-  title: string;
+export type TMovie = {
+  id: number;
+  name: string;
   isSerial: boolean;
   year?: number;
-  genres?: string[];
-  rating?: number;
+  country?: string;
+  age_restriction?: number;
+  duration?: number;
+  logline?: string;
+  description?: string;
   poster?: string;
+  trailer?: string;
+  genres?: string[];
+  kinopoisk_rating?: number;
 };
