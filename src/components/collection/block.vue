@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { TMovie } from '@/types/collection';
+import { TMovie } from '@/types/movie';
 import { useScroll, useElementSize, useWindowSize } from '@vueuse/core';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 import { vIntersectionObserver } from '@vueuse/components';
 
 const root = ref<HTMLElement | null>(null);
-const activeMoviePreview = ref<TMovie | null>(null);
 
 const { width: widthWindow } = useWindowSize();
 const { width } = useElementSize(root);
@@ -38,8 +37,6 @@ const { title, movies, oneRow } = defineProps<TCollection>();
         <li
           class="item"
           v-for="movie in movies"
-          @mouseleave="activeMoviePreview = null"
-          @mouseenter="activeMoviePreview = movie"
           v-intersection-observer="[
             onIntersectionObserver,
             { root, threshold: 1 },
@@ -47,11 +44,8 @@ const { title, movies, oneRow } = defineProps<TCollection>();
         >
           <CollectionItem :key="movie.id" :movie="movie" />
         </li>
-        <CollectionPreview
-          v-if="activeMoviePreview"
-          :movie="activeMoviePreview"
-        />
       </ul>
+
       <button
         v-if="oneRow"
         @click="x -= width"
@@ -113,7 +107,7 @@ const { title, movies, oneRow } = defineProps<TCollection>();
 }
 
 .icon {
-  width: $padding-wrapper / 1.2;
+  width: calc($padding-wrapper / 1.2);
   margin: auto;
 }
 

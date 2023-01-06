@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TMovie } from '@/types/collection';
+import { TMovie } from '@/types/movie';
 
 const trailer =
   'http://192.168.1.3:9000/movies/%D0%9F%D0%BE%D0%B3%D0%BE%D0%BD%D1%8F.mp4';

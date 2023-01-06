@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TMovie } from '@/types/collection';
+import { TMovie } from '@/types/movie';
 
 const { movie } = defineProps<{ movie: TMovie }>();
 const { name, year, genres, isSerial, kinopoisk_rating, poster } = movie;
