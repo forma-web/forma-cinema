@@ -4,7 +4,7 @@
 @import 'transitions';
 
 html {
-  font-size: 62.5%;
+  font-size: 1vh;
 }
 
 body {
@@ -39,4 +39,15 @@ h3 {
 h4 {
   font-size: 1.125em;
   font-weight: 500;
+}
+
+.wrapper {
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+  padding: calc(2 * $padding-wrapper + $height-header) 0
+    calc($padding-wrapper * 1.5);
+  display: flex;
+  flex-direction: column;
+  row-gap: $padding-wrapper * 1.12;
 }

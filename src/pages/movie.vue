@@ -28,10 +28,9 @@ const movie: TMovie = {
   genres: ['боевик', 'комедия', 'драма'],
   country: 'США',
   year: 2019,
-  trailer:
-    'http://192.168.1.3:9000/movies/Погоня.mp4',
+  trailer: 'http://192.168.1.3:9000/movies/MVI_9891.mp4',
   poster:
-    'https://avatars.mds.yandex.net/get-ott/1648503/2a000001711b57abb795e9276957168f83e9/1344x756',
+    'https://avatars.mds.yandex.net/get-ott/2385704/2a0000016fb3b32790463e872fedfea4228c/2016x1134',
 };
 
 type TDetail = {
@@ -93,7 +92,9 @@ const details = computed(() =>
             {{ movie.logline }}
           </div>
         </div>
-        <div class="movie__control"></div>
+        <div class="movie__control">
+          <FrmMoviePlaybutton />
+        </div>
       </div>
       <div class="movie__details">
         <div
@@ -110,7 +111,12 @@ const details = computed(() =>
     </div>
     <div class="movie__trailer test">
       <Transition>
-        <img class="poster" :src="movie.poster" v-show="posterVisible" />
+        <img
+          class="poster"
+          :src="movie.poster"
+          v-show="posterVisible"
+          loading="eager"
+        />
       </Transition>
       <video
         ref="video"
@@ -184,7 +190,7 @@ const details = computed(() =>
   align-items: baseline;
   column-gap: 1.6em;
   padding: 1.2em 0;
-  border-bottom: 1px solid change-color($font-color-description, $alpha: 0.2);
+  border-bottom: $border-line;
 }
 
 .detail__type {
@@ -203,10 +209,7 @@ const details = computed(() =>
   width: 100%;
   height: 80%;
   background-color: #000;
-}
-
-.movie__trailer {
-  opacity: 0.6;
+  opacity: 0.8;
   z-index: 1;
   mask-image: radial-gradient(100vw 80vh at top center, #000000, transparent);
 }
@@ -229,5 +232,6 @@ const details = computed(() =>
 .poster {
   object-position: top;
   z-index: 2;
+  background-color: $background-color-primary;
 }
 </style>

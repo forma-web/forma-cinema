@@ -42,7 +42,9 @@ const { title, movies, oneRow } = defineProps<TCollection>();
             { root, threshold: 1 },
           ]"
         >
-          <CollectionItem :key="movie.id" :movie="movie" />
+          <NuxtLink to="/movie">
+            <CollectionItem :key="movie.id" :movie="movie" />
+          </NuxtLink>
         </li>
       </ul>
 

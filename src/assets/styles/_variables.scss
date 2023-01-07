@@ -11,6 +11,7 @@ $color-rating-great: linear-gradient(116.45deg, #eafb2a 0%, #e7a82e 100%);
 $font-color-rating-great: #362804;
 
 $padding-wrapper: 7rem;
+$height-header: 4rem;
 
 $border-radius: 0.6rem;
 
@@ -22,3 +23,8 @@ $width-collection-movie: calc(
 $animation-time: 0.2s;
 $opacity: 0.6;
 $opacity-disabled: 0.4;
+
+$scale-up: 1.08;
+$scale-down: 0.96;
+
+$border-line: 1px solid change-color($font-color-description, $alpha: 0.12);

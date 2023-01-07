@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'Forma Media',
-      //   link: [{ rel: 'icon', href: '/favicon.svg' }],
+      link: [{ rel: 'icon', href: '/logo.svg' }],
     },
   },
   vite: {
@@ -24,8 +24,6 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true,
   },
-  modules: [
-    '@vueuse/nuxt',
-  ],
+  modules: ['@vueuse/nuxt'],
 });
 
