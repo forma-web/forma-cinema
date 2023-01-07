@@ -1,29 +1,34 @@
+<script setup lang="ts">
+const { isSeconadary } = defineProps<{
+  isSeconadary?: boolean;
+}>();
+</script>
+
 <template>
-  <button class="button">
+  <button
+    class="button"
+    :class="{ button_secondary: isSeconadary, button_primary: !isSeconadary }"
+  >
     <slot></slot>
   </button>
 </template>
 
 <style scoped lang="scss">
 .button {
-  background-color: $font-color-primary;
-  color: $background-color-primary;
-  padding: 1.2em 1.8em;
-  border-radius: 100rem;
-  display: flex;
-  line-height: 1;
-  font-weight: 500;
-  column-gap: 1rem;
-  user-select: none;
-  will-change: scale;
-  transition: scale $animation-time ease;
+  width: 100%;
+  border-radius: 0.8rem;
+  color: $font-color-primary;
+  font-size: 1.8rem;
+  padding: 1em 2em;
 
-  &:hover {
-    scale: $scale-up;
+  &_primary {
+    background-color: $font-color-primary;
+    color: $background-color-primary;
   }
 
-  &:active {
-    scale: $scale-down;
+  &_secondary {
+    color: $font-color-description;
+    border: $border-line $border-color;
   }
 }
 </style>

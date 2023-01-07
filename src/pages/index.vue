@@ -79,5 +79,4 @@ const data: TMovie[] = [
 
 <template>
   <CollectionBlock title="Популярное" :movies="data" one-row />
-  <CollectionBlock :movies="data" />
 </template>

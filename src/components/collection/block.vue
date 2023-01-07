@@ -98,6 +98,10 @@ const { title, movies, oneRow } = defineProps<TCollection>();
   cursor: pointer;
   z-index: 2;
   display: flex;
+
+  &:hover, &:active {
+    scale: 1;
+  }
 }
 
 .button-left {
