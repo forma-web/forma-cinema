@@ -64,8 +64,8 @@ const details = computed(() =>
 <template>
   <div class="movie">
     <div class="movie__content">
-      <h1 class="movie__title">Джентельмены</h1>
       <div class="movie__information">
+        <h1 class="movie__title">Джентельмены</h1>
         <div class="movie__meta">
           <div class="movie__features"></div>
           <div class="movie__logline">
@@ -73,21 +73,21 @@ const details = computed(() =>
             не&nbsp;отпускает. Успешное возвращение Гая Ричи к&nbsp;корням
           </div>
         </div>
-        <div class="movie__details">
-          <div
-            class="movie__detail detail"
-            v-for="detail in details"
-            :key="detail.type"
-          >
-            <div class="detail__type">{{ detail.label }}</div>
-            <div class="detail__value">
-              {{ detail.value }}
-            </div>
+        <div class="movie__control"></div>
+      </div>
+      <div class="movie__details">
+        <div
+          class="movie__detail detail"
+          v-for="detail in details"
+          :key="detail.type"
+        >
+          <div class="detail__type">{{ detail.label }}</div>
+          <div class="detail__value">
+            {{ detail.value }}
           </div>
         </div>
       </div>
     </div>
-    <div class="movie__control"></div>
     <div class="movie__trailer">
       <img
         src="https://avatars.mds.yandex.net/get-ott/1648503/2a000001711b57abb795e9276957168f83e9/1344x756"
@@ -106,51 +106,49 @@ const details = computed(() =>
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   row-gap: 3.2rem;
   padding: $padding-wrapper;
 }
 
-.movie__title {
-  font-size: 6.4rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  line-height: 1.2;
-}
-
-.movie__title,
-.movie__meta,
-.movie__logline {
-  width: 61.7%;
-}
-
-.movie__logline {
-  font-size: 2.8rem;
-  font-weight: 300;
-  line-height: 1.5;
-}
-
 .movie__content {
   position: relative;
-  flex: 1;
   z-index: 2;
   display: flex;
-  flex-direction: column;
-  row-gap: 3.2em;
+  justify-content: space-between;
+  align-items: flex-end;
+  column-gap: 3.2em;
 }
 
 .movie__information {
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  column-gap: 3.2em;
+  row-gap: 3.2em;
+}
+
+.movie__title {
+  font-size: 6.4rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.movie__meta,
+.movie__information {
+  width: 61.7%;
+}
+
+.movie__logline {
+  font-size: 2.4rem;
+  font-weight: 300;
+  line-height: 1.5;
 }
 
 .movie__details {
-  width: 30%;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  row-gap: 0.8em;
   font-size: 1.8rem;
 }
 
@@ -158,6 +156,8 @@ const details = computed(() =>
   display: flex;
   align-items: baseline;
   column-gap: 1.6em;
+  padding: 1.2em 0;
+  border-bottom: 1px solid change-color($font-color-description, $alpha: 0.2);
 }
 
 .detail__type {
@@ -169,31 +169,32 @@ const details = computed(() =>
   flex: 1;
 }
 
-.movie__trailer,
+.movie__trailer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80%;
+  background-color: #000;
+}
+
+.movie__trailer {
+  opacity: 0.6;
+  z-index: 1;
+  mask-image: radial-gradient(100vw 80vh at top center, #000000, transparent);
+}
+
 .movie_background {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #000;
-}
-
-.movie__trailer {
-  opacity: 0.5;
-  z-index: 1;
-}
-
-.movie_background {
-  background: radial-gradient(
-    circle farthest-corner at 50% 50%,
-    change-color($background-color-primary, $alpha: 0.2) 0%,
-    change-color($background-color-primary, $alpha: 1) 100%
-  );
   z-index: 2;
 }
 
 img {
+  object-position: top;
   z-index: 1;
 }
 </style>
