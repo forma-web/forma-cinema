@@ -1,16 +1,37 @@
 <script setup lang="ts">
 import { TMovie } from '../types/movie';
 
+const video = ref<HTMLVideoElement | null>(null);
+const posterVisible = ref(true);
+
+const onStartTrailer = () => {
+  if (video.value) {
+    posterVisible.value = false;
+    video.value.play();
+  }
+};
+
+const onEndTrailer = () => {
+  if (video.value) {
+    posterVisible.value = true;
+    video.value.pause();
+  }
+};
+
 const movie: TMovie = {
   id: 1,
   name: 'Джентельмены',
   isSerial: false,
   logline:
-    'Наркобарон хочет уйти на&nbsp;покой, но&nbsp;криминальный мир не&nbsp;отпускает. Успешное возвращение Гая Ричи к&nbsp;корням',
-  duration: 6180,
+    'Наркобарон хочет уйти на покой, но криминальный мир не отпускает. Успешное возвращение Гая Ричи к корням',
+  duration: 6388,
   genres: ['боевик', 'комедия', 'драма'],
   country: 'США',
   year: 2019,
+  trailer:
+    'http://192.168.1.3:9000/movies/Погоня.mp4',
+  poster:
+    'https://avatars.mds.yandex.net/get-ott/1648503/2a000001711b57abb795e9276957168f83e9/1344x756',
 };
 
 type TDetail = {
@@ -65,12 +86,11 @@ const details = computed(() =>
   <div class="movie">
     <div class="movie__content">
       <div class="movie__information">
-        <h1 class="movie__title">Джентельмены</h1>
+        <h1 class="movie__title">{{ movie.name }}</h1>
         <div class="movie__meta">
           <div class="movie__features"></div>
-          <div class="movie__logline">
-            Наркобарон хочет уйти на&nbsp;покой, но&nbsp;криминальный мир
-            не&nbsp;отпускает. Успешное возвращение Гая Ричи к&nbsp;корням
+          <div class="movie__logline" v-if="movie.logline">
+            {{ movie.logline }}
           </div>
         </div>
         <div class="movie__control"></div>
@@ -88,11 +108,18 @@ const details = computed(() =>
         </div>
       </div>
     </div>
-    <div class="movie__trailer">
-      <img
-        src="https://avatars.mds.yandex.net/get-ott/1648503/2a000001711b57abb795e9276957168f83e9/1344x756"
-      />
-      <div class="movie_background"></div>
+    <div class="movie__trailer test">
+      <Transition>
+        <img class="poster" :src="movie.poster" v-show="posterVisible" />
+      </Transition>
+      <video
+        ref="video"
+        @canplaythrough="onStartTrailer"
+        @ended="onEndTrailer"
+        class="trailer"
+        :src="movie.trailer"
+        muted
+      ></video>
     </div>
   </div>
 </template>
@@ -184,17 +211,23 @@ const details = computed(() =>
   mask-image: radial-gradient(100vw 80vh at top center, #000000, transparent);
 }
 
-.movie_background {
+.trailer,
+.poster {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
 }
 
-img {
+.trailer {
+  object-fit: cover;
   object-position: top;
   z-index: 1;
+}
+
+.poster {
+  object-position: top;
+  z-index: 2;
 }
 </style>
