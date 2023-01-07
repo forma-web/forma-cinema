@@ -7,7 +7,9 @@
 <style scoped lang="scss">
 .wrapper {
   width: 100%;
-  padding: $padding-wrapper * 1.2 0 $padding-wrapper * 1.6;
+  min-height: 100%;
+  position: relative;
+  padding: $padding-wrapper 0;
   display: flex;
   flex-direction: column;
   row-gap: $padding-wrapper * 1.12;

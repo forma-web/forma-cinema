@@ -4,6 +4,5 @@ export default function formatMovieDetails(
   return args
     .flat()
     .filter((item) => typeof item === 'string')
-    .map((item) => item?.toLowerCase())
     .join(', ');
 }
