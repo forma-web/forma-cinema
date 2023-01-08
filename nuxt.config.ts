@@ -15,6 +15,11 @@ export default defineNuxtConfig({
       mode: 'out-in',
     },
   },
+  runtimeConfig: {
+    public: {
+      apiURL: 'http://192.168.1.3/api',
+    },
+  },
   vite: {
     css: {
       preprocessorOptions: {

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline';
-import { TInputProps } from '../../../types/form';
+import { TInputProps } from '@/types/form';
 
 const hidePassword = ref(true);
-const { name } = defineProps<TInputProps>();
+const { name } = defineProps<{ name: string }>();
 </script>
 
 <template>

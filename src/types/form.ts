@@ -1,4 +1,4 @@
-import { RuleExpression } from "vee-validate";
+import { RuleExpression } from 'vee-validate';
 
 export type TInputProps = {
   label?: string;

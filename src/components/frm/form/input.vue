@@ -5,8 +5,14 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { TInputProps } from '@/types/form';
 import { useField } from 'vee-validate';
+import { RuleExpression } from 'vee-validate';
+
+type TInputProps = {
+  label?: string;
+  name: string;
+  rules?: RuleExpression<string>;
+};
 
 const { label = '', name, rules } = defineProps<TInputProps>();
 const { value, errorMessage: error } = useField<string>(name, rules);
