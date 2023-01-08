@@ -5,10 +5,11 @@ export default {
 </script>
 
 <script setup lang="ts">
-const { label = '', error } = defineProps<{
-  label?: string;
-  error?: string;
-}>();
+import { TInputProps } from '@/types/form';
+import { useField } from 'vee-validate';
+
+const { label = '', name, rules } = defineProps<TInputProps>();
+const { value, errorMessage: error } = useField<string>(name, rules);
 </script>
 
 <template>
@@ -16,13 +17,16 @@ const { label = '', error } = defineProps<{
     <div class="description" v-if="label">
       {{ label }}
     </div>
-    <input
-      type="text"
-      class="input"
-      :class="{ input_error: error }"
-      v-bind="$attrs"
-    />
-    <slot> </slot>
+    <div class="label__block">
+      <input
+        type="text"
+        class="input"
+        :class="{ input_error: error }"
+        v-model="value"
+        v-bind="$attrs"
+      />
+      <slot></slot>
+    </div>
     <div class="description error" v-if="error">
       {{ error }}
     </div>
@@ -74,6 +78,10 @@ const { label = '', error } = defineProps<{
   }
 }
 
+.password-input {
+  padding-right: 3em;
+}
+
 .description {
   font-size: 0.875em;
   line-height: 1.5;
@@ -81,7 +89,13 @@ const { label = '', error } = defineProps<{
   color: gray;
 }
 
+.label__block {
+  width: 100%;
+  position: relative;
+}
+
 .error {
   color: $error-color;
+  margin-bottom: 0.2em;
 }
 </style>
