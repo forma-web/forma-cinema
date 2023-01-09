@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { useForm } from 'vee-validate';
 
+const validationSchema = {
+  email: { required: true, email: true, max: 255 },
+  password: { required: true, min: 8, max: 255 },
+};
+
 const config = useRuntimeConfig();
-const { meta, handleSubmit } = useForm<TLogin>();
+const { meta, handleSubmit } = useForm<TLogin>({
+  validationSchema,
+});
 const commonError = ref('');
 
 definePageMeta({
@@ -20,13 +27,16 @@ const onSubmit = handleSubmit(async (values, actions) => {
     commonError.value = '';
     console.log(data.value);
   } else if (error.value) {
-    const { message, errors } = error.value.data;
+    const { message, errors } = error.value.data ?? {};
+    console.log(error.value);
     if (errors) {
       actions.setErrors(errors);
-    } else {
+    } else if (message) {
       commonError.value = message;
       actions.resetForm({ values });
-      console.log(meta.value);
+    } else {
+      commonError.value = 'Что-то пошло не так. Попробуйте позже';
+      actions.resetForm({ values });
     }
   }
 });
@@ -36,23 +46,15 @@ const onSubmit = handleSubmit(async (values, actions) => {
   <form class="auth-form" @submit="onSubmit">
     <h3>Вход</h3>
     <fieldset class="auth-form__fieldset">
-      <FrmFormInput
-        placeholder="Email"
-        name="email"
-        :rules="{ required: true, email: true, max: 255 }"
-      />
-      <FrmFormPassword
-        placeholder="Пароль"
-        name="password"
-        :rules="{ required: true, min: 8, max: 255 }"
-      />
+      <FrmFormInput placeholder="Email" name="email" />
+      <FrmFormPassword placeholder="Пароль" name="password" />
     </fieldset>
     <FrmFormError :error="commonError" v-if="!meta.dirty" />
     <fieldset class="auth-form__fieldset">
       <FrmFormButton type="submit">Войти</FrmFormButton>
       <NuxtLink to="/register"
         ><FrmFormButton is-seconadary type="button">
-          Уже есть аккаунт
+          Создать аккаунт
         </FrmFormButton>
       </NuxtLink>
     </fieldset>

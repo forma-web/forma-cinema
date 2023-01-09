@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiURL: 'http://192.168.1.3/api',
+      apiURL: 'http://ch-tours.ru:8888/api',
     },
   },
   vite: {

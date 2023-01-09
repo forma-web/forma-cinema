@@ -16,6 +16,7 @@ configure({
     names: {
       email: '',
       password: '',
+      first_name: '',
     },
   }),
 });
