@@ -51,3 +51,18 @@ h4 {
   flex-direction: column;
   row-gap: $padding-wrapper * 1.12;
 }
+
+button {
+  will-change: scale;
+  transition: scale $animation-time ease;
+
+  &:hover {
+    scale: 1.02;
+  }
+
+  &:active {
+    scale: $scale-down;
+  }
+}
+
+

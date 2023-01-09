@@ -3,10 +3,10 @@ import { PlayIcon } from '@heroicons/vue/24/solid';
 </script>
 
 <template>
-  <FrmButton>
+  <FrmMovieButton>
     <PlayIcon class="icon" />
     Смотреть
-  </FrmButton>
+  </FrmMovieButton>
 </template>
 
 <style scoped lang="scss">

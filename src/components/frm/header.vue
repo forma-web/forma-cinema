@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const { disabledProfile = false } = defineProps<{ disabledProfile?: boolean }>();
+const { disabledProfile = false } = defineProps<{
+  disabledProfile?: boolean;
+}>();
 </script>
 
 <template>
@@ -26,7 +28,7 @@ const { disabledProfile = false } = defineProps<{ disabledProfile?: boolean }>()
   align-items: center;
   margin: $padding-wrapper;
   padding-bottom: calc($padding-wrapper / 1.8);
-  border-bottom: $border-line;
+  border-bottom: $border-line $border-color;
 }
 
 .header__logo {

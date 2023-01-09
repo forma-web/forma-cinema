@@ -190,7 +190,7 @@ const details = computed(() =>
   align-items: baseline;
   column-gap: 1.6em;
   padding: 1.2em 0;
-  border-bottom: $border-line;
+  border-bottom: $border-line $border-color;
 }
 
 .detail__type {

@@ -10,6 +10,15 @@ export default defineNuxtConfig({
       title: 'Forma Media',
       link: [{ rel: 'icon', href: '/logo.svg' }],
     },
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in',
+    },
+  },
+  runtimeConfig: {
+    public: {
+      apiURL: 'http://92.125.33.134:8888/api',
+    },
   },
   vite: {
     css: {
@@ -26,4 +35,3 @@ export default defineNuxtConfig({
   },
   modules: ['@vueuse/nuxt'],
 });
-
