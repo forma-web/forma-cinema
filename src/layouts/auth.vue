@@ -7,7 +7,9 @@
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
+@import '@/assets/styles/auth.scss';
+
 .auth {
   margin: auto;
   width: 40rem;

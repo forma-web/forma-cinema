@@ -1,45 +1,15 @@
 <script setup lang="ts">
-import { useForm } from 'vee-validate';
-
-const validationSchema = {
-  email: { required: true, email: true, max: 255 },
-  password: { required: true, min: 8, max: 255 },
-};
-
-const config = useRuntimeConfig();
-const { meta, handleSubmit } = useForm<TLogin>({
-  validationSchema,
-});
-const commonError = ref('');
+import { LOGIN_VALIDATION_SCHEMES as validationSchema } from '@/constants/forms';
+import onLogin from '@/services/forms/login';
 
 definePageMeta({
   layout: 'auth',
 });
 
-const onSubmit = handleSubmit(async (values, actions) => {
-  const { data, error } = await useFetch('/auth/login', {
-    method: 'POST',
-    body: values,
-    baseURL: config.public.apiURL,
-  });
-
-  if (data.value) {
-    commonError.value = '';
-    console.log(data.value);
-  } else if (error.value) {
-    const { message, errors } = error.value.data ?? {};
-    console.log(error.value);
-    if (errors) {
-      actions.setErrors(errors);
-    } else if (message) {
-      commonError.value = message;
-      actions.resetForm({ values });
-    } else {
-      commonError.value = 'Что-то пошло не так. Попробуйте позже';
-      actions.resetForm({ values });
-    }
-  }
-});
+const { meta, onSubmit, commonError } = useMultiForm<TLogin>(
+  onLogin,
+  validationSchema
+);
 </script>
 
 <template>
@@ -60,7 +30,3 @@ const onSubmit = handleSubmit(async (values, actions) => {
     </fieldset>
   </form>
 </template>
-
-<style scoped lang="scss">
-@import '@/assets/styles/auth.scss';
-</style>
