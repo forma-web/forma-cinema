@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { LOGIN_VALIDATION_SCHEMES as validationSchema } from '@/constants/forms';
-import onLogin from '@/services/forms/login';
+import { onLogin } from '@/services/forms/auth';
 
 definePageMeta({
   layout: 'auth',

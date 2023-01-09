@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { REGISTER_VALIDATION_SCHEMES as validationSchema } from '@/constants/forms';
-import onRegister from '@/services/forms/register';
+import { onRegister } from '@/services/forms/auth';
 
 definePageMeta({
   layout: 'auth',

@@ -2,7 +2,7 @@
   <h3>Как вас зовут?</h3>
   <fieldset class="auth-form__fieldset">
     <FrmFormInput placeholder="Имя" name="first_name" />
-    <FrmFormInput placeholder="Фамилия" name="second_name" />
+    <FrmFormInput placeholder="Фамилия" name="last_name" />
   </fieldset>
   <fieldset class="auth-form__fieldset">
     <FrmFormButton type="submit">Дальше</FrmFormButton>
