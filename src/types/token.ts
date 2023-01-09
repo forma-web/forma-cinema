@@ -3,3 +3,8 @@ export type TAuthMeta = {
   token_type: string;
   expires_in: number;
 };
+
+export type TJWTToken = {
+  jwt: string;
+  expiration: number;
+};
