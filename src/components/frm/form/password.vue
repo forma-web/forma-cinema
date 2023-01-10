@@ -15,6 +15,7 @@ const { name } = defineProps<{ name: string }>();
     <button
       class="password-input__button"
       @click="hidePassword = !hidePassword"
+      type="button"
     >
       <EyeIcon v-if="hidePassword" />
       <EyeSlashIcon v-else />

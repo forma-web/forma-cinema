@@ -5,6 +5,7 @@ import { setJWTToken } from '@/helpers/jwt';
 import setFormErrors from '@/helpers/formErrors';
 import { TAuth, TAuthError } from '@/types/auth';
 import { AsyncData } from 'nuxt/dist/app/composables';
+import { useUserStore } from '@/stores/user';
 
 const onAuth =
   <T extends Record<string, any> = Record<string, any>>(
@@ -20,8 +21,9 @@ const onAuth =
     if (data.value) {
       commonError.value = '';
       const { data: userData, meta } = data.value;
-      const user = useUser();
-      user.value = userData;
+      const store = useUserStore();
+      store.setUserData(userData);
+      
       setJWTToken(meta);
       navigateTo('/');
     } else if (error.value) {

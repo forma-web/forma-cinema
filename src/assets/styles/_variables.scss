@@ -3,6 +3,7 @@ $font-color-description: #aaaaaa;
 
 $background-color-primary: #0d0d0d;
 $background-loading-preview: #101a16;
+$background-profile: #2c2c2c;
 
 $error-color: #ee1f1f;
 
@@ -15,6 +16,7 @@ $input-color: change-color($font-color-description, $alpha: 0.4);
 
 $padding-wrapper: 7rem;
 $height-header: 4rem;
+$padding-header: calc($padding-wrapper / 3.6);
 
 $border-radius: 0.6rem;
 

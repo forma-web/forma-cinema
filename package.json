@@ -9,18 +9,22 @@
   },
   "devDependencies": {
     "@heroicons/vue": "^2.0.13",
+    "@pinia/nuxt": "^0.4.6",
     "@vee-validate/i18n": "^4.7.3",
     "@vee-validate/rules": "^4.7.3",
     "@vueuse/components": "^9.10.0",
     "@vueuse/core": "^9.10.0",
     "@vueuse/nuxt": "^9.10.0",
     "nuxt": "3.0.0",
+    "pinia": "^2.0.28",
     "sass": "^1.57.1",
     "typescript": "^4.9.4",
-    "vue-tsc": "^1.0.20",
-    "yup": "^0.32.11"
+    "vue-tsc": "^1.0.20"
   },
   "dependencies": {
     "vee-validate": "^4.7.3"
+  },
+  "overrides": {
+    "vue": "latest"
   }
 }
