@@ -1,11 +1,24 @@
+<script setup lang="ts">
+import { useUserStore } from '@/stores/user';
+
+const store = useUserStore();
+</script>
+
 <template>
-  <div class="profile-control">
+  <div class="profile-control" v-if="store.username">
     <div class="profile-control__user">
-      <div class="profile-control__username">Павел Сенченко</div>
-      <div class="profile-control__email description__text">pvs@tusur.ru</div>
+      <div class="profile-control__username">{{ store.username }}</div>
+      <div class="profile-control__email description__text">
+        {{ store.data?.email }}
+      </div>
     </div>
     <div class="profile-control__buttons-list">
-      <button class="profile-control__button button_no-scaled">Выйти</button>
+      <button
+        class="profile-control__button button_no-scaled"
+        @click="store.logoutUser"
+      >
+        Выйти
+      </button>
     </div>
   </div>
 </template>
@@ -28,6 +41,13 @@ $padding: 1.2em;
     display: flex;
     flex-direction: column;
     row-gap: 0.12em;
+  }
+
+  &__email {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
   }
 
   &__buttons-list {

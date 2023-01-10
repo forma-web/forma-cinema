@@ -33,5 +33,13 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true,
   },
-  modules: ['@vueuse/nuxt'],
+  modules: [
+    '@vueuse/nuxt',
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: ['defineStore'],
+      },
+    ],
+  ],
 });

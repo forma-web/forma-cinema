@@ -12,3 +12,7 @@ export type TAuthError = {
     errors?: Record<string, string[]>;
   };
 };
+
+export type TUserResponce = {
+  data: TUser;
+};

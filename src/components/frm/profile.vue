@@ -1,13 +1,21 @@
 <script setup lang="ts">
+import { useUserStore } from '../../stores/user';
+
 const contolVisible = ref(false);
 const contolElement = ref(null);
 
-onClickOutside(contolElement, () => (contolVisible.value = false));
+onClickOutside(contolElement, (event) => {
+  event.stopPropagation();
+  contolVisible.value = false;
+});
+
+const store = useUserStore();
+onMounted(async () => await store.getUserData());
 </script>
 
 <template>
   <div class="profile">
-    <FrmProfileIcon @click="contolVisible = true" />
+    <FrmProfileIcon @click="contolVisible = !contolVisible" />
     <Transition name="opacity">
       <FrmProfileControl v-if="contolVisible" ref="contolElement" />
     </Transition>

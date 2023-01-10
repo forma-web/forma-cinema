@@ -34,3 +34,9 @@ export const getJWTToken = async () => {
   await refresh();
   return getJWTData()?.jwt;
 };
+
+export const deleteJWTToken = () => {
+  localStorage.removeItem('token');
+};
+
+

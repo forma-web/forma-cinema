@@ -1,5 +1,5 @@
-import { TAuth, TAuthError } from '@/types/auth';
-import { getJWTData, setJWTToken } from '@/helpers/jwt';
+import { TAuth, TAuthError, TUserResponce } from '@/types/auth';
+import { getJWTData, getJWTToken, setJWTToken } from '@/helpers/jwt';
 import { TAuthMeta } from '@/types/token';
 
 const config = useRuntimeConfig();
@@ -37,3 +37,29 @@ export const refresh = () =>
       setJWTToken(null);
     },
   });
+
+export const currentUser = async () => {
+  const jwt = await useToken();
+  if (!jwt) return null;
+
+  return useFetch<TUserResponce, TAuthError>('/auth/me', {
+    method: 'GET',
+    baseURL,
+    headers: {
+      Authorization: jwt,
+    },
+  });
+};
+
+export const logout = async () => {
+  const jwt = await useToken();
+  if (!jwt) return null;
+
+  return useFetch<null, TAuthError>('/auth/logout', {
+    method: 'POST',
+    baseURL,
+    headers: {
+      Authorization: jwt,
+    },
+  });
+};
