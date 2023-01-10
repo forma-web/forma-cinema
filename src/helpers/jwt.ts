@@ -1,4 +1,5 @@
 import { TAuthMeta, TJWTToken } from '@/types/token';
+import { refresh } from '@/services/api/auth';
 
 export const setJWTToken = (meta: TAuthMeta | null) => {
   if (meta === null) {
@@ -11,14 +12,25 @@ export const setJWTToken = (meta: TAuthMeta | null) => {
   localStorage.setItem('token', JSON.stringify({ jwt, expiration }));
 };
 
-export const getJWTToken = () => {
+export const getJWTData = (): TJWTToken | null => {
   const { jwt, expiration } = JSON.parse(
     localStorage.getItem('token') || '{}'
   ) as TJWTToken;
   if (!jwt) {
     localStorage.removeItem('token');
     return null;
-  } else {
-    return jwt;
   }
+  return { jwt, expiration };
+};
+
+export const getJWTToken = async () => {
+  const jwtData = getJWTData();
+  if (!jwtData) return null;
+
+  const { jwt, expiration } = jwtData;
+
+  if (new Date().getTime() < expiration) return jwt;
+
+  await refresh();
+  return getJWTData()?.jwt;
 };

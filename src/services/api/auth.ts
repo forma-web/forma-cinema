@@ -1,5 +1,5 @@
 import { TAuth, TAuthError } from '@/types/auth';
-import { getJWTToken, setJWTToken } from '@/helpers/jwt';
+import { getJWTData, setJWTToken } from '@/helpers/jwt';
 import { TAuthMeta } from '@/types/token';
 
 const config = useRuntimeConfig();
@@ -26,7 +26,7 @@ export const refresh = () =>
 
     onRequest({ options }) {
       options.headers = (options.headers as Record<string, string>) || {};
-      options.headers.authorization = String(getJWTToken());
+      options.headers.authorization = String(getJWTData()?.jwt);
     },
 
     onResponse({ response }) {

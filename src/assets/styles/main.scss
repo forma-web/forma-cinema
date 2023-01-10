@@ -65,4 +65,16 @@ button {
   }
 }
 
+.button_no-scaled {
+  &:hover,
+  &:active {
+    scale: 1;
+  }
+}
 
+.description__text {
+  font-size: 0.875em;
+  line-height: 1.5;
+  font-weight: 400;
+  color: $font-color-description;
+}

@@ -51,7 +51,7 @@ const { title, movies, oneRow } = defineProps<TCollection>();
       <button
         v-if="oneRow"
         @click="x -= width"
-        class="button-left"
+        class="button-left button_no-scaled"
         :class="{ 'button-left_disabled': arrivedState.left }"
       >
         <ChevronLeftIcon class="icon" />
@@ -59,7 +59,7 @@ const { title, movies, oneRow } = defineProps<TCollection>();
       <button
         v-if="oneRow"
         @click="x += width"
-        class="button-right"
+        class="button-right button_no-scaled"
         :class="{ 'button-right_disabled': arrivedState.right }"
       >
         <ChevronRightIcon class="icon" />
@@ -98,10 +98,6 @@ const { title, movies, oneRow } = defineProps<TCollection>();
   cursor: pointer;
   z-index: 2;
   display: flex;
-
-  &:hover, &:active {
-    scale: 1;
-  }
 }
 
 .button-left {

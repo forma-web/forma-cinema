@@ -42,13 +42,6 @@ const detailsData = typeof details === 'string' ? [details] : details;
   display: flex;
   flex-wrap: wrap;
   gap: 0.325em;
-
-  &__text {
-    font-size: 0.875em;
-    line-height: 1.5;
-    font-weight: 400;
-    color: $font-color-description;
-  }
 }
 
 .name {

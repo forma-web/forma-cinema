@@ -18,6 +18,7 @@ const { disabledProfile = false } = defineProps<{
 <style scoped lang="scss">
 .header {
   position: absolute;
+  box-sizing: content-box;
   top: 0;
   left: 0;
   z-index: 2;
@@ -27,25 +28,26 @@ const { disabledProfile = false } = defineProps<{
   justify-content: space-between;
   align-items: center;
   margin: $padding-wrapper;
-  padding-bottom: calc($padding-wrapper / 1.8);
+  padding-bottom: $padding-header;
   border-bottom: $border-line $border-color;
 }
 
 .header__logo {
   width: 2.4rem;
   color: white;
-}
-
-.header__item {
   opacity: 0.8;
-  transition: opacity $animation-time ease, scale $animation-time ease;
-
-  &:hover {
-    opacity: 1;
-  }
+  transition: scale $animation-time ease;
 
   &:active {
     scale: $scale-down;
+  }
+}
+
+.header__item {
+  transition: opacity $animation-time ease;
+
+  &:hover {
+    opacity: 1;
   }
 }
 </style>

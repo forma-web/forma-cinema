@@ -3,12 +3,19 @@
   transition: opacity 0.5s ease;
 }
 
+.opacity-enter-active,
+.opacity-leave-active {
+  transition: opacity $animation-time ease;
+}
+
 .v-leave-active {
   transition-delay: 1s;
 }
 
 .v-enter-from,
-.v-leave-to {
+.v-leave-to,
+.opacity-enter-from,
+.opacity-leave-to {
   opacity: 0;
 }
 
