@@ -3,6 +3,7 @@ import { TMovie } from '@/types/movie';
 import { useScroll, useElementSize, useWindowSize } from '@vueuse/core';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 import { vIntersectionObserver } from '@vueuse/components';
+import { useMoviesStore } from '../../stores/movies';
 
 const root = ref<HTMLElement | null>(null);
 
@@ -20,13 +21,15 @@ function onIntersectionObserver([
 }
 const { x, arrivedState } = useScroll(root, { behavior: 'smooth' });
 
-type TCollection = {
+type TCollectionProps = {
   title?: string;
-  movies: TMovie[];
+  movieIDs: number[];
   oneRow?: boolean;
 };
 
-const { title, movies, oneRow } = defineProps<TCollection>();
+const store = useMoviesStore();
+
+const { title, movieIDs, oneRow } = defineProps<TCollectionProps>();
 </script>
 
 <template>
@@ -36,14 +39,14 @@ const { title, movies, oneRow } = defineProps<TCollection>();
       <ul class="list" :class="{ 'list_one-row': oneRow }" ref="root">
         <li
           class="item"
-          v-for="movie in movies"
+          v-for="movieID in movieIDs"
           v-intersection-observer="[
             onIntersectionObserver,
             { root, threshold: 1 },
           ]"
         >
-          <NuxtLink to="/movie">
-            <CollectionItem :key="movie.id" :movie="movie" />
+          <NuxtLink to="/movie" v-if="store.data.hasOwnProperty(movieID)">
+            <CollectionItem :key="movieID" :movie="store.data[movieID]" />
           </NuxtLink>
         </li>
       </ul>

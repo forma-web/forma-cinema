@@ -2,12 +2,9 @@
 import { TMovie } from '@/types/movie';
 
 const { movie } = defineProps<{ movie: TMovie }>();
-const { name, year, genres, isSerial, kinopoisk_rating, poster } = movie;
+const { name, year, genres, kinopoisk_rating, poster } = movie;
 
-const description = formatMovieDetails(
-  formatYearDetail(year, isSerial),
-  genres
-);
+const description = formatMovieDetails(String(year));
 </script>
 
 <template>

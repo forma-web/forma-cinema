@@ -21,11 +21,9 @@ const onEndTrailer = () => {
 const movie: TMovie = {
   id: 1,
   name: 'Джентельмены',
-  isSerial: false,
   logline:
     'Наркобарон хочет уйти на покой, но криминальный мир не отпускает. Успешное возвращение Гая Ричи к корням',
   duration: 6388,
-  genres: ['боевик', 'комедия', 'драма'],
   country: 'США',
   year: 2019,
   trailer: 'http://192.168.1.3:9000/movies/MVI_9891.mp4',
