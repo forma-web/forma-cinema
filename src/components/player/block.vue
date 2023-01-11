@@ -1,26 +1,74 @@
 <script setup lang="ts">
-const currentTime = ref<number>(0);
-const duration = ref<number>(80);
+import { STEP_REWIND } from '@/constants/player';
 
-const { pause, resume } = useIntervalFn(() => {
-  currentTime.value += 1 / 60;
-}, 1000 / 60);
+const { name, src } = defineProps<{
+  name?: string;
+  src: string;
+}>();
 
-watch(
-  () => currentTime.value,
-  (value) => {
-    if (value >= duration.value) {
-      pause();
-    }
+useHead({
+  title: name,
+});
+
+const video = ref<HTMLVideoElement | null>(null);
+const currentLoaded = ref<number>(0);
+
+const { toggle } = useFullscreen();
+
+const controls = useMediaControls(video, {
+  src: {
+    src,
+  },
+});
+const { playing, buffered, currentTime, duration } = controls;
+
+const changePlaying = () => (playing.value = !playing.value);
+const rewindBack = () => {
+  if (currentTime.value - STEP_REWIND > 0) {
+    currentTime.value -= STEP_REWIND;
+  } else {
+    currentTime.value = 0;
   }
-);
+};
+const rewindForward = () => {
+  if (currentTime.value + STEP_REWIND < duration.value) {
+    currentTime.value += STEP_REWIND;
+  } else {
+    currentTime.value = duration.value;
+  }
+};
+
+watch(buffered, () => {
+  if (buffered.value.length == 0) return;
+  console.log(buffered.value);
+
+  let nearestBufferIndex = 0;
+  while (nearestBufferIndex < buffered.value.length - 1) {
+    if (buffered.value[nearestBufferIndex + 1][0] > currentTime.value) {
+      break;
+    }
+    nearestBufferIndex++;
+  }
+  currentLoaded.value = buffered.value[nearestBufferIndex][1];
+});
 </script>
 
 <template>
-  <div class="player">
-    <div class="player__video-block"></div>
+  <div
+    class="player"
+    :tabindex="0"
+    autofocus
+    @keydown.prevent.space="changePlaying"
+    @keydown.right="rewindForward"
+    @keydown.left="rewindBack"
+    @keydown.f="toggle"
+    @keydown.а="toggle"
+  >
+    <div class="player__video-block" @click="changePlaying">
+      <video ref="video" class="player__video"></video>
+    </div>
     <div class="player__header">
-      <div class="player__title">Джентельмены</div>
+      <div class="player__title">{{ name }}</div>
       <div class="player__control player__control_right"></div>
     </div>
     <div class="player__bar">
@@ -28,8 +76,9 @@ watch(
         class="player__progress"
         :duration="duration"
         :progress="currentTime / duration"
-        :pause="pause"
-        :resume="resume"
+        :loaded="currentLoaded / duration"
+        :pause="() => (playing = false)"
+        :resume="() => (playing = true)"
         @update:progress="(value: number) => (currentTime = value * duration)"
       />
       <div class="player__controls">
@@ -49,6 +98,7 @@ $buttons-gap: 1.2rem;
 .player__video-block {
   width: 100%;
   height: 100%;
+  background-color: black;
   position: absolute;
   overflow: hidden;
   top: 0;
@@ -100,5 +150,11 @@ $buttons-gap: 1.2rem;
 .player__title {
   font-size: 2.4rem;
   font-weight: 500;
+}
+
+.player__video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 </style>

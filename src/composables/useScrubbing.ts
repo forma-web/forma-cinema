@@ -6,7 +6,7 @@ export const useScrubbable = (
   finishScrubbing?: () => void
 ) => {
   const progressElem = ref<HTMLElement>();
-  const scrubbing = ref(false);
+  const scrubbing = ref<boolean | null>(null);
   const pendingValue = ref(0);
 
   useEventListener('mouseup', () => (scrubbing.value = false));
@@ -18,9 +18,10 @@ export const useScrubbable = (
     Math.max(0, Math.min(1, elementX.value / elementWidth.value))
   );
 
-  watch([scrubbing], () =>
-    scrubbing.value ? startScrubbing?.() : finishScrubbing?.()
-  );
+  watch([scrubbing], () => {
+    if (scrubbing.value === null) return;
+    scrubbing.value ? startScrubbing?.() : finishScrubbing?.();
+  });
 
   watch([scrubbing, hoveredProgress], () => {
     pendingValue.value = hoveredProgress.value;
@@ -28,7 +29,7 @@ export const useScrubbable = (
   });
 
   return {
-    isActive: isHovered || scrubbing,
+    isHovered,
     hoveredProgress,
     progressElem,
     scrubbing,

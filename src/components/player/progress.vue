@@ -1,16 +1,27 @@
 <script setup lang="ts">
 type TProgressProps = {
   progress: number;
+  loaded: number;
   duration: number;
   pause: () => void;
   resume: () => void;
 };
 const state = defineProps<TProgressProps>();
+const { progress, duration, loaded } = toRefs(state);
+const currentTime = computed(() =>
+  Math.max(0, Math.min(1, progress.value) * duration.value)
+);
 
 const emit = defineEmits(['update:progress']);
-const progress = useVModel(state, 'progress', emit);
-const { isActive, progressElem, hoveredProgress, scrubbing, elementWidth } =
-  useScrubbable(progress, state.pause, state.resume);
+const progressPercent = useVModel(state, 'progress', emit);
+const { progressElem, hoveredProgress, ...scrubbableData } = useScrubbable(
+  progressPercent,
+  state.pause,
+  state.resume
+);
+
+const { isHovered, scrubbing, elementWidth } = scrubbableData;
+const isActive = computed(() => isHovered.value || scrubbing.value);
 </script>
 
 <template>
@@ -21,7 +32,10 @@ const { isActive, progressElem, hoveredProgress, scrubbing, elementWidth } =
       @mousedown="scrubbing = true"
     >
       <div class="progress__bar progress-bar">
-        <div class="progress-bar__loaded"></div>
+        <div
+          class="progress-bar__loaded"
+          :style="{ transform: `scaleX(${loaded})` }"
+        ></div>
         <div
           class="progress-bar__hovered"
           v-if="isActive"
@@ -38,6 +52,10 @@ const { isActive, progressElem, hoveredProgress, scrubbing, elementWidth } =
           <div class="progress-bar__point"></div>
         </div>
       </div>
+    </div>
+    <div class="progress-bar__time-container">
+      <div class="progress-bar__time">{{ formatVideoTime(currentTime) }}</div>
+      <div class="progress-bar__time">{{ formatVideoTime(duration) }}</div>
     </div>
   </div>
 </template>
@@ -80,6 +98,7 @@ $progress-bar-hovered-height: calc($progress-bar-height * 1.5);
 
   &__loaded {
     background-color: $progress-bar-bg;
+    transition: transform $animation-time ease;
   }
 
   &__hovered {
@@ -110,6 +129,13 @@ $progress-bar-hovered-height: calc($progress-bar-height * 1.5);
     background-color: white;
     will-change: scale;
   }
+}
+
+.progress-bar__time-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.8rem;
 }
 
 .progress {
