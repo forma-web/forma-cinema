@@ -2,7 +2,7 @@
 const currentTime = ref<number>(0);
 const duration = ref<number>(80);
 
-const { pause } = useIntervalFn(() => {
+const { pause, resume } = useIntervalFn(() => {
   currentTime.value += 1 / 60;
 }, 1000 / 60);
 
@@ -28,6 +28,8 @@ watch(
         class="player__progress"
         :duration="duration"
         :progress="currentTime / duration"
+        :pause="pause"
+        :resume="resume"
         @update:progress="(value: number) => (currentTime = value * duration)"
       />
       <div class="player__controls">
