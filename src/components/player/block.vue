@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { STEP_REWIND } from '@/constants/player';
-
 const { name, src } = defineProps<{
   name?: string;
   src: string;
@@ -10,47 +8,18 @@ useHead({
   title: name,
 });
 
-const video = ref<HTMLVideoElement | null>(null);
-const currentLoaded = ref<number>(0);
-
-const { toggle } = useFullscreen();
-
-const controls = useMediaControls(video, {
-  src: {
-    src,
-  },
-});
-const { playing, buffered, currentTime, duration } = controls;
-
-const changePlaying = () => (playing.value = !playing.value);
-const rewindBack = () => {
-  if (currentTime.value - STEP_REWIND > 0) {
-    currentTime.value -= STEP_REWIND;
-  } else {
-    currentTime.value = 0;
-  }
-};
-const rewindForward = () => {
-  if (currentTime.value + STEP_REWIND < duration.value) {
-    currentTime.value += STEP_REWIND;
-  } else {
-    currentTime.value = duration.value;
-  }
-};
-
-watch(buffered, () => {
-  if (buffered.value.length == 0) return;
-  console.log(buffered.value);
-
-  let nearestBufferIndex = 0;
-  while (nearestBufferIndex < buffered.value.length - 1) {
-    if (buffered.value[nearestBufferIndex + 1][0] > currentTime.value) {
-      break;
-    }
-    nearestBufferIndex++;
-  }
-  currentLoaded.value = buffered.value[nearestBufferIndex][1];
-});
+const {
+  video,
+  playing,
+  currentTime,
+  currentLoaded,
+  duration,
+  isFullscreen,
+  togglePlaying,
+  toggleFullscreen,
+  rewindBack,
+  rewindForward,
+} = usePlayer(src);
 </script>
 
 <template>
@@ -58,14 +27,15 @@ watch(buffered, () => {
     class="player"
     :tabindex="0"
     autofocus
-    @keydown.prevent.space="changePlaying"
+    @keydown.prevent.space="togglePlaying"
     @keydown.right="rewindForward"
     @keydown.left="rewindBack"
-    @keydown.f="toggle"
-    @keydown.а="toggle"
+    @keydown.f="toggleFullscreen"
+    @keydown.а="toggleFullscreen"
   >
-    <div class="player__video-block" @click="changePlaying">
+    <div class="player__video-block" @click="togglePlaying">
       <video ref="video" class="player__video"></video>
+      <div class="player__background"></div>
     </div>
     <div class="player__header">
       <div class="player__title">{{ name }}</div>
@@ -83,8 +53,20 @@ watch(buffered, () => {
       />
       <div class="player__controls">
         <div class="player__control player__control_left"></div>
-        <div class="player__control player__control_center"></div>
-        <div class="player__control player__control_right"></div>
+        <div class="player__control player__control_center">
+          <PlayerControlRewind :rewind="rewindBack" />
+          <PlayerControlPlaying
+            :playing="playing"
+            :togglePlaying="togglePlaying"
+          />
+          <PlayerControlRewind :rewind="rewindForward" is-forward />
+        </div>
+        <div class="player__control player__control_right">
+          <PlayerControlFullscreen
+            :fullscreen="isFullscreen"
+            :toggleFullscreen="toggleFullscreen"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -92,7 +74,7 @@ watch(buffered, () => {
 
 <style lang="scss" scoped>
 $player-padding: 7rem;
-$buttons-gap: 1.2rem;
+$buttons-gap: 2.4rem;
 
 .player,
 .player__video-block {
@@ -118,8 +100,21 @@ $buttons-gap: 1.2rem;
   top: $player-padding;
 }
 
+.player__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(80vw 80vh at center center, transparent, #000000);
+  opacity: 0.6;
+}
+
 .player__bar {
   bottom: $player-padding;
+  display: flex;
+  flex-direction: column;
+  row-gap: 2.8rem;
 }
 
 .player__controls {
