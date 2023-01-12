@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { ArrowsPointingInIcon, ArrowsPointingOutIcon } from '@heroicons/vue/24/solid';
+import {
+  ArrowsPointingInIcon,
+  ArrowsPointingOutIcon,
+} from '@heroicons/vue/24/solid';
 
-const { fullscreen, toggleFullscreen } = defineProps<{
+const { fullscreen } = defineProps<{
   fullscreen: boolean;
-  toggleFullscreen: () => void;
 }>();
+
+const emit = defineEmits(['toggleFullscreen']);
 </script>
 
 <template>
-  <PlayerControlBtn @click="toggleFullscreen">
+  <PlayerControlBtn @click="emit('toggleFullscreen')">
     <ArrowsPointingInIcon v-if="fullscreen" />
     <ArrowsPointingOutIcon v-else />
   </PlayerControlBtn>

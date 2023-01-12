@@ -1,5 +1,7 @@
 const formatVideoTime = (time: number) => {
-  const seconds = Math.trunc(time);
+  if (isNaN(time)) time = 0;
+  const isNegative = time < 0 ? '-' : '';
+  const seconds = Math.trunc(Math.abs(time));
   const minutes = Math.trunc(seconds / 60);
   const hours = Math.trunc(minutes / 60);
 
@@ -9,12 +11,12 @@ const formatVideoTime = (time: number) => {
     seconds % 60,
   ];
 
-  return formattedTime
+  return `${isNegative}${formattedTime
     .filter((el) => el !== null)
     .map((el, index) =>
       index !== 0 ? String(el).padStart(2, '0') : String(el)
     )
-    .join(':');
+    .join(':')}`;
 };
 
 export default formatVideoTime;

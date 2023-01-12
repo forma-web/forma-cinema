@@ -3,8 +3,8 @@ type TProgressProps = {
   progress: number;
   loaded: number;
   duration: number;
-  pause: () => void;
-  resume: () => void;
+  pause?: () => void;
+  resume?: () => void;
 };
 const state = defineProps<TProgressProps>();
 const { progress, duration, loaded } = toRefs(state);
@@ -21,7 +21,9 @@ const { progressElem, hoveredProgress, ...scrubbableData } = useScrubbable(
 );
 
 const { isHovered, scrubbing, elementWidth } = scrubbableData;
-const isActive = computed(() => isHovered.value || scrubbing.value);
+const isActive = computed(
+  () => (isHovered.value || scrubbing.value) && duration.value > 0
+);
 </script>
 
 <template>
@@ -55,105 +57,23 @@ const isActive = computed(() => isHovered.value || scrubbing.value);
     </div>
     <div class="progress-bar__time-container">
       <div class="progress-bar__time">{{ formatVideoTime(currentTime) }}</div>
-      <div class="progress-bar__time">{{ formatVideoTime(duration) }}</div>
+      <div class="progress-bar__time">
+        {{ formatVideoTime(currentTime - duration) }}
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-$progress-bar-bg: change-color($font-color-description, $alpha: 0.12);
-$progress-line-bg: change-color($font-color-description, $alpha: 0.8);
-$progress-bar-height: 4px;
-$progress-container-height: calc($progress-bar-height * 3);
-$progress-bar-hovered-height: calc($progress-bar-height * 1.5);
+@import '@/assets/styles/player.scss';
 
-.progress__bar-container {
-  position: relative;
-  width: 100%;
-  height: $progress-container-height;
-  display: flex;
-  align-items: center;
-}
-
-.progress-bar {
-  position: relative;
-  height: $progress-bar-height;
-  transition: height $animation-time ease;
-  width: 100%;
-  background-color: $progress-bar-bg;
-  will-change: height;
-  cursor: pointer;
-
-  &__loaded,
-  &__line,
-  &__hovered {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    will-change: width;
-    transform-origin: 0 center;
-  }
-
-  &__loaded {
-    background-color: $progress-bar-bg;
-    transition: transform $animation-time ease;
-  }
-
-  &__hovered {
-    background-color: $progress-bar-bg;
-  }
-
-  &__line {
-    background-color: $progress-line-bg;
-  }
-
-  &__point,
-  &__point-container {
-    width: $progress-container-height;
-    height: $progress-container-height;
-  }
-
-  &__point-container {
-    position: absolute;
-    top: calc($progress-bar-hovered-height / -2);
-    left: calc($progress-container-height / -2);
-    will-change: translateX;
-  }
-
-  &__point {
-    scale: 0;
-    border-radius: 50%;
-    transition: scale $animation-time ease;
-    background-color: white;
-    will-change: scale;
-  }
-}
-
-.progress-bar__time-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 0.8rem;
-}
-
-.progress {
-  position: relative;
-  width: 100%;
-  user-select: none;
-
-  &_hovered {
-    .progress-bar {
-      height: $progress-bar-hovered-height;
-    }
-
-    .progress-bar__line {
-      background-color: white;
-    }
-
-    .progress-bar__point {
-      scale: 1;
+.progress_hovered {
+  .progress-bar {
+    height: $progress-bar-hovered-height;
+    cursor: pointer;
+    
+    &__point-container {
+      top: calc($progress-bar-hovered-height / -2);
     }
   }
 }

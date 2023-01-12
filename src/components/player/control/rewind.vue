@@ -3,14 +3,15 @@ import {
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
 } from '@heroicons/vue/24/outline';
-const { rewind, isForward } = defineProps<{
-  rewind: () => void;
+const { isForward } = defineProps<{
   isForward?: boolean;
 }>();
+
+const emit = defineEmits(['rewind']);
 </script>
 
 <template>
-  <PlayerControlBtn @click="rewind">
+  <PlayerControlBtn @click="emit('rewind')">
     <ArrowUturnRightIcon v-if="isForward" />
     <ArrowUturnLeftIcon v-else />
   </PlayerControlBtn>

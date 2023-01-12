@@ -18,7 +18,7 @@ export const useScrubbable = (
     Math.max(0, Math.min(1, elementX.value / elementWidth.value))
   );
 
-  watch([scrubbing], () => {
+  watch(scrubbing, () => {
     if (scrubbing.value === null) return;
     scrubbing.value ? startScrubbing?.() : finishScrubbing?.();
   });
