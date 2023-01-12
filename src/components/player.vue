@@ -27,20 +27,20 @@ const {
 </script>
 
 <template>
-  <div class="player" :tabindex="0" autofocus :class="{plaeyr_idle: idle}">
+  <div class="player" :tabindex="0" autofocus :class="{ plaeyr_idle: idle }">
     <div class="player__video-block" @click="togglePlaying">
       <video ref="video" class="player__video"></video>
-      <Transition>
+      <Transition name="player">
         <div class="player__background" v-show="!idle"></div>
       </Transition>
     </div>
-    <Transition>
+    <Transition name="player">
       <div class="player__header" v-show="!idle">
         <div class="player__title">{{ name }}</div>
         <div class="player__control player__control_right"></div>
       </div>
     </Transition>
-    <Transition>
+    <Transition name="player">
       <div class="player__bar" v-show="!idle">
         <!-- <div class="player__setting setting"></div> -->
         <PlayerProgress
