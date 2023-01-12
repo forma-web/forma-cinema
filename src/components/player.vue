@@ -24,6 +24,9 @@ const {
   rewindBack,
   rewindForward,
 } = usePlayer(src);
+
+const progressBarElem = ref<HTMLElement | null>(null);
+const isActiveProgressBar = useElementHover(progressBarElem);
 </script>
 
 <template>
@@ -41,7 +44,12 @@ const {
       </div>
     </Transition>
     <Transition name="player">
-      <div class="player__bar" v-show="!idle">
+      <div
+        class="player__bar"
+        :class="{ player__bar_active: isActiveProgressBar }"
+        ref="progressBarElem"
+        v-show="!idle"
+      >
         <!-- <div class="player__setting setting"></div> -->
         <PlayerProgress
           class="player__progress"
@@ -98,13 +106,13 @@ $buttons-gap: 2.4rem;
 .player__header,
 .player__bar {
   position: absolute;
-  left: $player-padding;
-  width: calc(100% - $player-padding * 2);
   z-index: 2;
 }
 
 .player__header {
   top: $player-padding;
+  left: $player-padding;
+  width: calc(100% - $player-padding * 2);
 }
 
 .player__background {
@@ -116,17 +124,19 @@ $buttons-gap: 2.4rem;
   background: radial-gradient(80vw 80vh at center center, transparent, #000000);
 }
 
-.player__bar {
-  bottom: $player-padding;
-  display: flex;
-  flex-direction: column;
-  row-gap: 2.8rem;
+.player__progress {
+  transition: transform $animation-time $animation;
+  transform: translateY(6.4rem);
 }
 
 .player__controls {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-flow: column;
+  opacity: 0;
+  transform: translateY(120%);
+  transition: opacity $animation-time $animation,
+    transform $animation-time $animation;
 }
 
 .player__control {
@@ -163,6 +173,26 @@ $buttons-gap: 2.4rem;
 
 .plaeyr_idle {
   cursor: none;
+}
+
+.player__bar {
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  row-gap: 2.8rem;
+  width: 100%;
+  padding: $player-padding;
+
+  &_active {
+    .player__controls {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .player__progress {
+      transform: translateY(0);
+    }
+  }
 }
 
 /* .player__setting {
