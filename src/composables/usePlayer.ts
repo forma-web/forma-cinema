@@ -33,9 +33,11 @@ const usePlayer = (src: string) => {
   const progressBarElem = ref<HTMLElement | null>(null);
   const progressBarState = useMouseInElement(progressBarElem);
   const isActiveProgressBar = computed(
-    () => progressBarState.elementY.value > -210
+    () =>
+      progressBarState.elementY.value >
+      -progressBarState.elementHeight.value * 2
   );
-
+  
   const togglePlaying = () => {
     playing.value = !playing.value;
   };

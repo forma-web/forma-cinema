@@ -31,12 +31,14 @@ export const getJWTToken = async () => {
 
   if (new Date().getTime() < expiration) return jwt;
 
-  await refresh();
+  const { error } = await refresh();
+  if (error.value) {
+    setJWTToken(null);
+    return;
+  }
   return getJWTData()?.jwt;
 };
 
 export const deleteJWTToken = () => {
   localStorage.removeItem('token');
 };
-
-

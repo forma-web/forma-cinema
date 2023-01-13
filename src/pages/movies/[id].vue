@@ -115,14 +115,6 @@ const DETAILS_DATA: TDetailConfig[] = [
       </div>
     </div>
     <div class="movie__trailer" v-if="movie">
-      <Transition name="film">
-        <img
-          class="poster"
-          :src="movie.poster"
-          v-show="posterVisible"
-          loading="eager"
-        />
-      </Transition>
       <video
         ref="video"
         @canplaythrough="onStartTrailer"
@@ -131,6 +123,15 @@ const DETAILS_DATA: TDetailConfig[] = [
         :src="movie.trailer"
         muted
       ></video>
+      <Transition name="film">
+        <img
+          class="poster"
+          :src="movie.poster"
+          v-show="posterVisible"
+          loading="eager"
+        />
+      </Transition>
+      <div class="movie__background"></div>
     </div>
   </div>
 </template>
@@ -212,11 +213,21 @@ const DETAILS_DATA: TDetailConfig[] = [
   top: 0;
   left: 0;
   width: 100%;
-  height: 80%;
-  background-color: #000;
-  opacity: 0.8;
-  z-index: 1;
-  mask-image: radial-gradient(100vw 80vh at top center, #000000, transparent);
+  height: 100%;
+  background-color: rgb(255, 255, 255);
+  opacity: 1;
+  /* mask-image: radial-gradient(100vw 92vh at top center, black, transparent); */
+}
+
+.movie__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: change-color($background-color-primary, $alpha: 0.88);
+  mask-image: radial-gradient(100vw 88vh at top center, transparent, black);
+  backdrop-filter: blur(1.2rem);
 }
 
 .trailer,
@@ -230,13 +241,10 @@ const DETAILS_DATA: TDetailConfig[] = [
 
 .trailer {
   object-fit: cover;
-  object-position: top;
-  z-index: 1;
 }
 
 .poster {
   object-position: top;
-  z-index: 2;
   background-color: $background-color-primary;
 }
 </style>

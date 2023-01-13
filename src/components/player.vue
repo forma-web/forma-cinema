@@ -137,7 +137,11 @@ $buttons-gap: 2.4rem;
 }
 
 .player__background {
-  background: radial-gradient(80vw 80vh at center center, transparent, #000000);
+  background: radial-gradient(
+    92vw 92vh at center center,
+    transparent,
+    rgba(0, 0, 0, 0.8)
+  );
 }
 
 .player__loading {
