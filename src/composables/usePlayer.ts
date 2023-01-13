@@ -13,10 +13,29 @@ const usePlayer = (src: string) => {
       src,
     },
   });
-  const { playing, volume, muted, buffered, currentTime, duration } = controls;
+  const {
+    playing,
+    volume,
+    muted,
+    buffered,
+    currentTime,
+    duration,
+    waiting,
+    seeking,
+  } = controls;
+
+  const ended = computed(
+    () =>
+      controls.duration.value > 0 &&
+      controls.currentTime.value === controls.duration.value
+  );
 
   const togglePlaying = () => {
     playing.value = !playing.value;
+  };
+  const restart = () => {
+    playing.value = true;
+    currentTime.value = 0;
   };
   const toggleMute = () => {
     muted.value = !muted.value;
@@ -66,6 +85,10 @@ const usePlayer = (src: string) => {
     currentLoaded.value = buffered.value[nearestBufferIndex][1];
   });
 
+  // watch([duration, video], () => {
+  //   if (duration.value > 0) video.value?.click();
+  // });
+
   onKeyDown(['а', 'А', 'f', 'F'], (e) => {
     e.preventDefault();
     toggleFullscreen();
@@ -103,6 +126,9 @@ const usePlayer = (src: string) => {
   return {
     video,
     playing,
+    waiting,
+    seeking,
+    ended,
     volume,
     muted,
     currentTime,
@@ -111,6 +137,7 @@ const usePlayer = (src: string) => {
     isFullscreen,
     idle,
     togglePlaying,
+    restart,
     toggleMute,
     toggleFullscreen,
     rewindBack,

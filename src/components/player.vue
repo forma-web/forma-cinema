@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { B } from 'unimport/dist/types-43b5e72f';
+
 const { name, src } = defineProps<{
   name?: string;
   src: string;
@@ -10,8 +12,10 @@ useHead({
 
 const {
   video,
+  ended,
   playing,
   volume,
+  waiting,
   muted,
   currentTime,
   currentLoaded,
@@ -19,6 +23,7 @@ const {
   isFullscreen,
   idle,
   togglePlaying,
+  restart,
   toggleMute,
   toggleFullscreen,
   rewindBack,
@@ -35,6 +40,11 @@ const isActiveProgressBar = useElementHover(progressBarElem);
       <video ref="video" class="player__video"></video>
       <Transition name="player">
         <div class="player__background" v-show="!idle"></div>
+      </Transition>
+      <Transition>
+        <div class="player__loading" v-show="waiting && playing">
+          <FrmLoading />
+        </div>
       </Transition>
     </div>
     <Transition name="player">
@@ -67,7 +77,10 @@ const isActiveProgressBar = useElementHover(progressBarElem);
               @toggleMute="toggleMute"
             />
           </div>
-          <div class="player__control player__control_center">
+          <div class="player__control player__control_center" v-if="ended">
+            <PlayerControlRestart @restartVideo="restart" />
+          </div>
+          <div class="player__control player__control_center" v-else>
             <PlayerControlRewind @rewind="rewindBack" />
             <PlayerControlPlaying
               :playing="playing"
@@ -115,13 +128,24 @@ $buttons-gap: 2.4rem;
   width: calc(100% - $player-padding * 2);
 }
 
-.player__background {
+.player__background,
+.player__video,
+.player__loading {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  display: flex;
+}
+
+.player__background {
   background: radial-gradient(80vw 80vh at center center, transparent, #000000);
+}
+
+.player__loading {
+  justify-content: center;
+  align-items: center;
 }
 
 .player__progress {
@@ -166,9 +190,12 @@ $buttons-gap: 2.4rem;
 }
 
 .player__video {
-  width: 100%;
-  height: 100%;
   object-fit: contain;
+  transition: filter $animation-time $animation;
+}
+
+.player__video_seeking {
+  filter: blur(1rem);
 }
 
 .plaeyr_idle {
@@ -182,6 +209,7 @@ $buttons-gap: 2.4rem;
   row-gap: 2.8rem;
   width: 100%;
   padding: $player-padding;
+  padding-top: calc($player-padding * 3);
 
   &_active {
     .player__controls {

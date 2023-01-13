@@ -5,7 +5,7 @@
 
 .v-enter-active,
 .v-leave-active {
-  transition: opacity calc($animation-time * 2) ease;
+  transition: opacity $animation-time $animation;
 }
 
 .player-enter-active,
