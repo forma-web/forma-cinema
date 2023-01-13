@@ -2,21 +2,13 @@
 import { getMoviesById } from '@/services/api/movies';
 import { TMovie } from '@/types/movie';
 import { Ref } from 'nuxt/dist/app/compat/capi';
-
-type TDetail = {
-  type: string;
-  label: string;
-  value: string;
-};
-
-type TDetailConfig = {
-  type: string;
-  label: string;
-  convert?: (value: any) => string;
-};
+import { TDetail } from '@/types/details';
+import { DETAILS_DATA } from '@/constants/details';
+import { useImage } from '@vueuse/core';
 
 const video = ref<HTMLVideoElement | null>(null);
 const posterVisible = ref(true);
+
 const movie = ref<TMovie>();
 const details = ref<TDetail[]>([]);
 
@@ -36,7 +28,7 @@ const onEndTrailer = () => {
 
 const route = useRoute();
 
-onMounted(async () => {
+onBeforeMount(async () => {
   const response = await getMoviesById(route.params.id as string);
   if (response && response.data?.value) {
     movie.value = response.data.value;
@@ -55,34 +47,6 @@ onMounted(async () => {
   } else {
   }
 });
-
-const DETAILS_DATA: TDetailConfig[] = [
-  {
-    type: 'duration',
-    label: 'Время',
-    convert: (value: number) => {
-      const totalMinutes = Math.floor(value / 60);
-      const hours = Math.floor(totalMinutes / 60);
-      const minutes = totalMinutes % 60;
-      return `${totalMinutes} мин ${
-        hours > 0 ? `/ ${hours} ч ${minutes} мин` : ''
-      }`;
-    },
-  },
-  // {
-  //   type: 'genres',
-  //   label: 'Жанры',
-  //   convert: (value: string[]) => value.join(', '),
-  // },
-  {
-    type: 'country',
-    label: 'Страна',
-  },
-  {
-    type: 'year',
-    label: 'Год производства',
-  },
-];
 </script>
 
 <template>
@@ -97,22 +61,10 @@ const DETAILS_DATA: TDetailConfig[] = [
           </div>
         </div>
         <div class="movie__control">
-          <FrmMoviePlaybutton />
+          <MoviePlaybutton />
         </div>
       </div>
-      <div class="movie__details">
-        <div
-          class="movie__detail detail"
-          v-if="details.length"
-          v-for="detail in details"
-          :key="detail.type"
-        >
-          <div class="detail__type">{{ detail.label }}</div>
-          <div class="detail__value">
-            {{ detail.value }}
-          </div>
-        </div>
-      </div>
+      <MovieDetails :details="details" />
     </div>
     <div class="movie__trailer" v-if="movie">
       <video
@@ -120,10 +72,11 @@ const DETAILS_DATA: TDetailConfig[] = [
         @canplaythrough="onStartTrailer"
         @ended="onEndTrailer"
         class="trailer"
+        loading="lazy"
         :src="movie.trailer"
         muted
       ></video>
-      <Transition name="film">
+      <Transition name="movie">
         <img
           class="poster"
           :src="movie.poster"
@@ -184,30 +137,6 @@ const DETAILS_DATA: TDetailConfig[] = [
   line-height: 1.5;
 }
 
-.movie__details {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  font-size: 1.8rem;
-}
-
-.movie__detail {
-  display: flex;
-  align-items: baseline;
-  column-gap: 1.6em;
-  padding: 1.2em 0;
-  border-bottom: $border-line $border-color;
-}
-
-.detail__type {
-  width: 10em;
-  color: $font-color-description;
-}
-
-.detail__value {
-  flex: 1;
-}
-
 .movie__trailer {
   position: absolute;
   top: 0;
@@ -245,6 +174,10 @@ const DETAILS_DATA: TDetailConfig[] = [
 
 .poster {
   object-position: top;
+  background-color: $background-color-primary;
+}
+
+.poster {
   background-color: $background-color-primary;
 }
 </style>

@@ -12,10 +12,10 @@ const description = formatMovieDetails(
 
 <template>
   <article class="movie">
-    <FrmMoviePreview :poster="poster" class="movie__preview">
+    <MoviePreview :poster="poster" class="movie__preview">
       <FrmRating :rating="kinopoisk_rating" v-if="kinopoisk_rating" />
-    </FrmMoviePreview>
-    <FrmMovieInfo :name="name" :details="description" />
+    </MoviePreview>
+    <MovieInfo :name="name" :details="description" />
   </article>
 </template>
 
