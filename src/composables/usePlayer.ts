@@ -120,6 +120,7 @@ const usePlayer = (src: string) => {
   });
 
   onKeyDown(['m', 'M', 'ь', 'Ь'], (e) => {
+    e.preventDefault();
     toggleMute();
   });
 
