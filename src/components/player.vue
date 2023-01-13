@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { B } from 'unimport/dist/types-43b5e72f';
-
 const { name, src } = defineProps<{
   name?: string;
   src: string;
@@ -21,6 +19,8 @@ const {
   currentLoaded,
   duration,
   isFullscreen,
+  progressBarElem,
+  isActiveProgressBar,
   idle,
   togglePlaying,
   restart,
@@ -29,15 +29,12 @@ const {
   rewindBack,
   rewindForward,
 } = usePlayer(src);
-
-const progressBarElem = ref<HTMLElement | null>(null);
-const isActiveProgressBar = useElementHover(progressBarElem);
 </script>
 
 <template>
   <div class="player" :tabindex="0" autofocus :class="{ plaeyr_idle: idle }">
     <div class="player__video-block" @click="togglePlaying">
-      <video ref="video" class="player__video"></video>
+      <video ref="video" class="player__video" autoplay></video>
       <Transition name="player">
         <div class="player__background" v-show="!idle"></div>
       </Transition>
@@ -120,12 +117,12 @@ $buttons-gap: 2.4rem;
 .player__bar {
   position: absolute;
   z-index: 2;
+  left: $player-padding;
+  width: calc(100% - $player-padding * 2);
 }
 
 .player__header {
   top: $player-padding;
-  left: $player-padding;
-  width: calc(100% - $player-padding * 2);
 }
 
 .player__background,
@@ -203,13 +200,10 @@ $buttons-gap: 2.4rem;
 }
 
 .player__bar {
-  bottom: 0;
+  bottom: $player-padding;
   display: flex;
   flex-direction: column;
   row-gap: 2.8rem;
-  width: 100%;
-  padding: $player-padding;
-  padding-top: calc($player-padding * 3);
 
   &_active {
     .player__controls {

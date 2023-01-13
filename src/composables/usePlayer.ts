@@ -30,6 +30,12 @@ const usePlayer = (src: string) => {
       controls.currentTime.value === controls.duration.value
   );
 
+  const progressBarElem = ref<HTMLElement | null>(null);
+  const progressBarState = useMouseInElement(progressBarElem);
+  const isActiveProgressBar = computed(
+    () => progressBarState.elementY.value > -210
+  );
+
   const togglePlaying = () => {
     playing.value = !playing.value;
   };
@@ -136,6 +142,8 @@ const usePlayer = (src: string) => {
     currentLoaded,
     duration,
     isFullscreen,
+    progressBarElem,
+    isActiveProgressBar,
     idle,
     togglePlaying,
     restart,
