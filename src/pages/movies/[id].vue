@@ -1,8 +1,24 @@
 <script setup lang="ts">
-import { TMovie } from '../types/movie';
+import { getMoviesById } from '@/services/api/movies';
+import { TMovie } from '@/types/movie';
+import { Ref } from 'nuxt/dist/app/compat/capi';
+
+type TDetail = {
+  type: string;
+  label: string;
+  value: string;
+};
+
+type TDetailConfig = {
+  type: string;
+  label: string;
+  convert?: (value: any) => string;
+};
 
 const video = ref<HTMLVideoElement | null>(null);
 const posterVisible = ref(true);
+const movie = ref<TMovie>();
+const details = ref<TDetail[]>([]);
 
 const onStartTrailer = () => {
   if (video.value) {
@@ -18,28 +34,29 @@ const onEndTrailer = () => {
   }
 };
 
-const movie: TMovie = {
-  id: 1,
-  name: 'Джентельмены',
-  isSerial: false,
-  logline:
-    'Наркобарон хочет уйти на покой, но криминальный мир не отпускает. Успешное возвращение Гая Ричи к корням',
-  duration: 6388,
-  genres: ['боевик', 'комедия', 'драма'],
-  country: 'США',
-  year: 2019,
-  trailer: 'http://192.168.1.3:9000/movies/MVI_9891.mp4',
-  poster:
-    'https://avatars.mds.yandex.net/get-ott/2385704/2a0000016fb3b32790463e872fedfea4228c/2016x1134',
-};
+const route = useRoute();
 
-type TDetail = {
-  type: string;
-  label: string;
-  convert?: (value: any) => string;
-};
+onMounted(async () => {
+  const response = await getMoviesById(route.params.id as string);
+  if (response && response.data?.value) {
+    movie.value = response.data.value;
+    details.value = DETAILS_DATA.filter((detail) =>
+      (movie as Ref<TMovie>).value.hasOwnProperty(detail.type)
+    ).map(({ type, label, convert }) => {
+      const movieValue = (movie as Ref<TMovie>).value[type as keyof TMovie];
+      const value =
+        convert && movieValue ? convert(movieValue) : String(movieValue);
+      return {
+        type,
+        label,
+        value,
+      };
+    });
+  } else {
+  }
+});
 
-const DETAILS_DATA: TDetail[] = [
+const DETAILS_DATA: TDetailConfig[] = [
   {
     type: 'duration',
     label: 'Время',
@@ -47,14 +64,16 @@ const DETAILS_DATA: TDetail[] = [
       const totalMinutes = Math.floor(value / 60);
       const hours = Math.floor(totalMinutes / 60);
       const minutes = totalMinutes % 60;
-      return `${totalMinutes} мин / ${hours} ч ${minutes} мин`;
+      return `${totalMinutes} мин ${
+        hours > 0 ? `/ ${hours} ч ${minutes} мин` : ''
+      }`;
     },
   },
-  {
-    type: 'genres',
-    label: 'Жанры',
-    convert: (value: string[]) => value.join(', '),
-  },
+  // {
+  //   type: 'genres',
+  //   label: 'Жанры',
+  //   convert: (value: string[]) => value.join(', '),
+  // },
   {
     type: 'country',
     label: 'Страна',
@@ -64,27 +83,12 @@ const DETAILS_DATA: TDetail[] = [
     label: 'Год производства',
   },
 ];
-
-const details = computed(() =>
-  DETAILS_DATA.filter((detail) => movie.hasOwnProperty(detail.type)).map(
-    ({ type, label, convert }) => {
-      const movieValue = movie[type as keyof TMovie];
-      const value =
-        convert && movieValue ? convert(movieValue) : String(movieValue);
-      return {
-        type,
-        label,
-        value,
-      };
-    }
-  )
-);
 </script>
 
 <template>
   <div class="movie">
     <div class="movie__content">
-      <div class="movie__information">
+      <div class="movie__information" v-if="movie">
         <h1 class="movie__title">{{ movie.name }}</h1>
         <div class="movie__meta">
           <div class="movie__features"></div>
@@ -99,6 +103,7 @@ const details = computed(() =>
       <div class="movie__details">
         <div
           class="movie__detail detail"
+          v-if="details.length"
           v-for="detail in details"
           :key="detail.type"
         >
@@ -109,8 +114,8 @@ const details = computed(() =>
         </div>
       </div>
     </div>
-    <div class="movie__trailer test">
-      <Transition>
+    <div class="movie__trailer" v-if="movie">
+      <Transition name="film">
         <img
           class="poster"
           :src="movie.poster"

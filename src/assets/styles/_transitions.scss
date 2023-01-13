@@ -1,21 +1,28 @@
-.v-enter-active,
-.v-leave-active {
+.movie-enter-active,
+.movie-leave-active {
   transition: opacity 0.5s ease;
 }
 
-.opacity-enter-active,
-.opacity-leave-active {
-  transition: opacity $animation-time ease;
+.v-enter-active,
+.v-leave-active {
+  transition: opacity $animation-time $animation;
 }
 
-.v-leave-active {
+.player-enter-active,
+.player-leave-active {
+  transition: opacity calc($animation-time * 2) ease;
+}
+
+.movie-leave-active {
   transition-delay: 1s;
 }
 
+.movie-enter-from,
+.movie-leave-to,
 .v-enter-from,
 .v-leave-to,
-.opacity-enter-from,
-.opacity-leave-to {
+.player-enter-from,
+.player-leave-to {
   opacity: 0;
 }
 

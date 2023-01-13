@@ -10,10 +10,10 @@ export default defineNuxtConfig({
       title: 'Forma Media',
       link: [{ rel: 'icon', href: '/logo.svg' }],
     },
-    pageTransition: {
-      name: 'page',
-      mode: 'out-in',
-    },
+    // pageTransition: {
+    //   name: 'page',
+    //   mode: 'out-in',
+    // },
   },
   runtimeConfig: {
     public: {
