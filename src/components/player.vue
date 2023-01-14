@@ -1,13 +1,15 @@
 <script setup lang="ts">
 const {
   name,
-  src,
+  src = '',
+  poster,
   mutedPlayer = false,
   disabledContol = false,
   coveredScreen = false,
 } = defineProps<{
   name?: string;
-  src: string;
+  src?: string;
+  poster?: string;
   mutedPlayer?: boolean;
   disabledContol?: boolean;
   coveredScreen?: boolean;
@@ -26,6 +28,7 @@ const {
   volume,
   waiting,
   muted,
+  isLoadingPoster,
   currentTime,
   currentLoaded,
   duration,
@@ -33,13 +36,18 @@ const {
   progressBarElem,
   isActiveProgressBar,
   idle,
+  posterVisability,
   togglePlaying,
   restart,
   toggleMute,
   toggleFullscreen,
   rewindBack,
   rewindForward,
-} = usePlayer(src, { isMuted: mutedPlayer, disableContolKey: disabledContol });
+} = usePlayer(src, {
+  isMuted: mutedPlayer,
+  disableContolKey: disabledContol,
+  poster,
+});
 </script>
 
 <template>
@@ -52,6 +60,18 @@ const {
         autoplay
         :muted="mutedPlayer"
       ></video>
+      <Transition name="movie">
+        <div class="player__poster" v-show="posterVisability">
+          <Transition>
+            <img
+              class="poster"
+              :src="poster"
+              loading="eager"
+              v-show="!isLoadingPoster"
+            />
+          </Transition>
+        </div>
+      </Transition>
       <template v-if="!disabledContol">
         <Transition name="player">
           <div class="player__background" v-show="!idle"></div>
@@ -146,13 +166,25 @@ $buttons-gap: 2.4rem;
 
 .player__background,
 .player__video,
-.player__loading {
+.player__loading,
+.player__poster {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   display: flex;
+}
+
+.player__video {
+  object-fit: cover;
+}
+
+.poster {
+  width: 100%;
+  height: 100%;
+  object-position: top;
+  background-color: $background-color-primary;
 }
 
 .player__background {

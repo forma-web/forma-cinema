@@ -2,25 +2,7 @@
 import { getMoviesById } from '@/services/api/movies';
 import { TMovie } from '@/types/movie';
 
-const video = ref<HTMLVideoElement | null>(null);
-const posterVisible = ref(true);
-
 const movie = ref<TMovie | null>(null);
-
-const onStartTrailer = () => {
-  if (video.value) {
-    posterVisible.value = false;
-    video.value.play();
-  }
-};
-
-const onEndTrailer = () => {
-  if (video.value) {
-    posterVisible.value = true;
-    video.value.pause();
-  }
-};
-
 const route = useRoute();
 
 onBeforeMount(async () => {
@@ -52,21 +34,12 @@ onBeforeMount(async () => {
     </div>
     <div class="movie__trailer" v-if="movie">
       <Player
-        ref="video"
         :src="movie.trailer"
-        v-if="movie.trailer"
+        :poster="movie.poster"
         muted-player
         disabled-contol
         covered-screen
       />
-      <Transition name="movie">
-        <img
-          class="poster"
-          :src="movie.poster"
-          v-show="posterVisible"
-          loading="eager"
-        />
-      </Transition>
       <div class="movie__background"></div>
     </div>
   </div>
@@ -119,48 +92,14 @@ onBeforeMount(async () => {
   font-weight: 300;
   line-height: 1.5;
 }
-
-.movie__trailer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(255, 255, 255);
-  opacity: 1;
-  /* mask-image: radial-gradient(100vw 92vh at top center, black, transparent); */
-}
-
 .movie__background {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: change-color($background-color-primary, $alpha: 0.88);
+  background-color: change-color($background-color-primary, $alpha: 0.68);
   mask-image: radial-gradient(100vw 88vh at top center, transparent, black);
-  backdrop-filter: blur(1.2rem);
-}
-
-.trailer,
-.poster {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.trailer {
-  object-fit: cover;
-}
-
-.poster {
-  object-position: top;
-  background-color: $background-color-primary;
-}
-
-.poster {
-  background-color: $background-color-primary;
+  backdrop-filter: blur(1.6rem);
 }
 </style>

@@ -1,18 +1,23 @@
 import { STEP_REWIND, STEP_VOLUME } from '@/constants/player';
-import { onKeyDown } from '@vueuse/core';
+import { onKeyDown, useImage } from '@vueuse/core';
 
 type TUsePlayerOption = {
   isMuted?: boolean;
   disableContolKey?: boolean;
+  poster?: string;
 };
 
 const usePlayer = (
   src: string,
-  { isMuted, disableContolKey }: TUsePlayerOption = {}
+  { isMuted, disableContolKey, poster }: TUsePlayerOption = {}
 ) => {
   const video = ref<HTMLVideoElement | null>(null);
   const currentLoaded = ref<number>(0);
+  const posterVisability = ref(!!poster);
 
+  const { isLoading: isLoadingPoster } = useImage({
+    src: poster ?? '',
+  });
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen();
   const { idle } = useIdle(5000);
 
@@ -105,9 +110,13 @@ const usePlayer = (
     currentLoaded.value = buffered.value[nearestBufferIndex][1];
   });
 
-  // watch([duration, video], () => {
-  //   if (duration.value > 0) video.value?.click();
-  // });
+  watch([duration, isLoadingPoster], () => {
+    if (duration.value > 0 && isLoadingPoster) posterVisability.value = false;
+  });
+
+  watch(ended, (isEnded) => {
+    if (isEnded) posterVisability.value = true && !!poster;
+  });
 
   if (!disableContolKey) {
     onKeyDown(['а', 'А', 'f', 'F'], (e) => {
@@ -160,7 +169,9 @@ const usePlayer = (
     isFullscreen,
     progressBarElem,
     isActiveProgressBar,
+    posterVisability,
     idle,
+    isLoadingPoster,
     togglePlaying,
     restart,
     toggleMute,
