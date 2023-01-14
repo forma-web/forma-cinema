@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import { getMoviesById } from '@/services/api/movies';
 import { TMovie } from '@/types/movie';
-import { Ref } from 'nuxt/dist/app/compat/capi';
-import { TDetail } from '@/types/details';
-import { DETAILS_DATA } from '@/constants/details';
-import { useImage } from '@vueuse/core';
 
 const video = ref<HTMLVideoElement | null>(null);
 const posterVisible = ref(true);
 
-const movie = ref<TMovie>();
-const details = ref<TDetail[]>([]);
+const movie = ref<TMovie | null>(null);
 
 const onStartTrailer = () => {
   if (video.value) {
@@ -32,19 +27,8 @@ onBeforeMount(async () => {
   const response = await getMoviesById(route.params.id as string);
   if (response && response.data?.value) {
     movie.value = response.data.value;
-    details.value = DETAILS_DATA.filter((detail) =>
-      (movie as Ref<TMovie>).value.hasOwnProperty(detail.type)
-    ).map(({ type, label, convert }) => {
-      const movieValue = (movie as Ref<TMovie>).value[type as keyof TMovie];
-      const value =
-        convert && movieValue ? convert(movieValue) : String(movieValue);
-      return {
-        type,
-        label,
-        value,
-      };
-    });
   } else {
+    showError({ statusCode: 404, message: 'Movie not found' });
   }
 });
 </script>
@@ -64,18 +48,17 @@ onBeforeMount(async () => {
           <MoviePlaybutton />
         </div>
       </div>
-      <MovieDetails :details="details" />
+      <MovieDetails :movie="movie" />
     </div>
     <div class="movie__trailer" v-if="movie">
-      <video
+      <Player
         ref="video"
-        @canplaythrough="onStartTrailer"
-        @ended="onEndTrailer"
-        class="trailer"
-        loading="lazy"
         :src="movie.trailer"
-        muted
-      ></video>
+        v-if="movie.trailer"
+        muted-player
+        disabled-contol
+        covered-screen
+      />
       <Transition name="movie">
         <img
           class="poster"

@@ -1,7 +1,27 @@
 <script setup lang="ts">
-import { TDetail } from '@/types/details';
+import { DETAILS_DATA } from '@/constants/details';
+import { TMovie } from '@/types/movie';
 
-const { details } = defineProps<{ details: TDetail[] }>();
+const props = defineProps<{ movie: TMovie | null }>();
+const { movie } = toRefs(props);
+
+const details = computed(() => {
+  if (movie.value !== null) {
+    return DETAILS_DATA.filter((detail) =>
+      movie.value?.hasOwnProperty(detail.type)
+    ).map(({ type, label, convert }) => {
+      const movieValue = movie.value?.[type as keyof TMovie];
+      const value =
+        convert && movieValue ? convert(movieValue) : String(movieValue);
+      return {
+        type,
+        label,
+        value,
+      };
+    });
+  }
+  return [];
+});
 </script>
 
 <template>

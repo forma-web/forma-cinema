@@ -1,7 +1,15 @@
 import { STEP_REWIND, STEP_VOLUME } from '@/constants/player';
 import { onKeyDown } from '@vueuse/core';
 
-const usePlayer = (src: string) => {
+type TUsePlayerOption = {
+  isMuted?: boolean;
+  disableContolKey?: boolean;
+};
+
+const usePlayer = (
+  src: string,
+  { isMuted, disableContolKey }: TUsePlayerOption = {}
+) => {
   const video = ref<HTMLVideoElement | null>(null);
   const currentLoaded = ref<number>(0);
 
@@ -37,7 +45,7 @@ const usePlayer = (src: string) => {
       progressBarState.elementY.value >
       -progressBarState.elementHeight.value * 2
   );
-  
+
   const togglePlaying = () => {
     playing.value = !playing.value;
   };
@@ -46,6 +54,10 @@ const usePlayer = (src: string) => {
     currentTime.value = 0;
   };
   const toggleMute = () => {
+    if (isMuted) {
+      muted.value = true;
+      return;
+    }
     muted.value = !muted.value;
     if (!muted.value && volume.value == 0) {
       volume.value = 0.5;
@@ -97,40 +109,42 @@ const usePlayer = (src: string) => {
   //   if (duration.value > 0) video.value?.click();
   // });
 
-  onKeyDown(['а', 'А', 'f', 'F'], (e) => {
-    e.preventDefault();
-    toggleFullscreen();
-  });
+  if (!disableContolKey) {
+    onKeyDown(['а', 'А', 'f', 'F'], (e) => {
+      e.preventDefault();
+      toggleFullscreen();
+    });
 
-  onKeyDown(['ArrowLeft', 'MediaTrackPrevious'], (e) => {
-    e.preventDefault();
-    rewindBack();
-  });
+    onKeyDown(['ArrowLeft', 'MediaTrackPrevious'], (e) => {
+      e.preventDefault();
+      rewindBack();
+    });
 
-  onKeyDown(['ArrowRight', 'MediaTrackNext'], (e) => {
-    e.preventDefault();
-    rewindForward();
-  });
+    onKeyDown(['ArrowRight', 'MediaTrackNext'], (e) => {
+      e.preventDefault();
+      rewindForward();
+    });
 
-  onKeyDown(['ArrowUp'], (e) => {
-    e.preventDefault();
-    volumeUp();
-  });
+    onKeyDown(['ArrowUp'], (e) => {
+      e.preventDefault();
+      volumeUp();
+    });
 
-  onKeyDown(['ArrowDown'], (e) => {
-    e.preventDefault();
-    volumeDown();
-  });
+    onKeyDown(['ArrowDown'], (e) => {
+      e.preventDefault();
+      volumeDown();
+    });
 
-  onKeyDown([' '], (e) => {
-    e.preventDefault();
-    togglePlaying();
-  });
+    onKeyDown([' '], (e) => {
+      e.preventDefault();
+      togglePlaying();
+    });
 
-  onKeyDown(['m', 'M', 'ь', 'Ь'], (e) => {
-    e.preventDefault();
-    toggleMute();
-  });
+    onKeyDown(['m', 'M', 'ь', 'Ь'], (e) => {
+      e.preventDefault();
+      toggleMute();
+    });
+  }
 
   return {
     video,

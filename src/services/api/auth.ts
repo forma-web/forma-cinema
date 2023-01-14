@@ -44,7 +44,7 @@ export const currentUser = async () => {
   const jwt = await useToken();
   if (!jwt) return null;
 
-  return useFetch<TUserResponce, TAuthError>('/auth/me', {
+  return useFetch<TUserResponce, TAuthError>('/user', {
     method: 'GET',
     baseURL,
     headers: {
