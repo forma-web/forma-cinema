@@ -4,8 +4,8 @@ definePageMeta({
 });
 
 const videoData = {
-  name: 'Казино «Рояль»',
-  src: 'http://92.125.33.134:9999/movies/6102b13f-cb0b-46ea-b030-874e79901ac7.mp4',
+  name: 'Топ Ган: Мэверик',
+  src: 'http://92.125.33.134:9999/movies/18454344-0a83-428d-92e9-061c9e439334.mp4',
 };
 </script>
 

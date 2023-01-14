@@ -1,88 +1,18 @@
 <script setup lang="ts">
 import { getMoviesById } from '@/services/api/movies';
 import { TMovie } from '@/types/movie';
-import { Ref } from 'nuxt/dist/app/compat/capi';
 
-type TDetail = {
-  type: string;
-  label: string;
-  value: string;
-};
-
-type TDetailConfig = {
-  type: string;
-  label: string;
-  convert?: (value: any) => string;
-};
-
-const video = ref<HTMLVideoElement | null>(null);
-const posterVisible = ref(true);
-const movie = ref<TMovie>();
-const details = ref<TDetail[]>([]);
-
-const onStartTrailer = () => {
-  if (video.value) {
-    posterVisible.value = false;
-    video.value.play();
-  }
-};
-
-const onEndTrailer = () => {
-  if (video.value) {
-    posterVisible.value = true;
-    video.value.pause();
-  }
-};
-
+const movie = ref<TMovie | null>(null);
 const route = useRoute();
 
-onMounted(async () => {
+onBeforeMount(async () => {
   const response = await getMoviesById(route.params.id as string);
   if (response && response.data?.value) {
     movie.value = response.data.value;
-    details.value = DETAILS_DATA.filter((detail) =>
-      (movie as Ref<TMovie>).value.hasOwnProperty(detail.type)
-    ).map(({ type, label, convert }) => {
-      const movieValue = (movie as Ref<TMovie>).value[type as keyof TMovie];
-      const value =
-        convert && movieValue ? convert(movieValue) : String(movieValue);
-      return {
-        type,
-        label,
-        value,
-      };
-    });
   } else {
+    showError({ statusCode: 404, message: 'Movie not found' });
   }
 });
-
-const DETAILS_DATA: TDetailConfig[] = [
-  {
-    type: 'duration',
-    label: 'Время',
-    convert: (value: number) => {
-      const totalMinutes = Math.floor(value / 60);
-      const hours = Math.floor(totalMinutes / 60);
-      const minutes = totalMinutes % 60;
-      return `${totalMinutes} мин ${
-        hours > 0 ? `/ ${hours} ч ${minutes} мин` : ''
-      }`;
-    },
-  },
-  // {
-  //   type: 'genres',
-  //   label: 'Жанры',
-  //   convert: (value: string[]) => value.join(', '),
-  // },
-  {
-    type: 'country',
-    label: 'Страна',
-  },
-  {
-    type: 'year',
-    label: 'Год производства',
-  },
-];
 </script>
 
 <template>
@@ -97,40 +27,20 @@ const DETAILS_DATA: TDetailConfig[] = [
           </div>
         </div>
         <div class="movie__control">
-          <FrmMoviePlaybutton />
+          <MoviePlaybutton />
         </div>
       </div>
-      <div class="movie__details">
-        <div
-          class="movie__detail detail"
-          v-if="details.length"
-          v-for="detail in details"
-          :key="detail.type"
-        >
-          <div class="detail__type">{{ detail.label }}</div>
-          <div class="detail__value">
-            {{ detail.value }}
-          </div>
-        </div>
-      </div>
+      <MovieDetails :movie="movie" />
     </div>
     <div class="movie__trailer" v-if="movie">
-      <Transition name="film">
-        <img
-          class="poster"
-          :src="movie.poster"
-          v-show="posterVisible"
-          loading="eager"
-        />
-      </Transition>
-      <video
-        ref="video"
-        @canplaythrough="onStartTrailer"
-        @ended="onEndTrailer"
-        class="trailer"
+      <Player
         :src="movie.trailer"
-        muted
-      ></video>
+        :poster="movie.poster"
+        muted-player
+        disabled-contol
+        covered-screen
+      />
+      <div class="movie__background"></div>
     </div>
   </div>
 </template>
@@ -182,61 +92,14 @@ const DETAILS_DATA: TDetailConfig[] = [
   font-weight: 300;
   line-height: 1.5;
 }
-
-.movie__details {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  font-size: 1.8rem;
-}
-
-.movie__detail {
-  display: flex;
-  align-items: baseline;
-  column-gap: 1.6em;
-  padding: 1.2em 0;
-  border-bottom: $border-line $border-color;
-}
-
-.detail__type {
-  width: 10em;
-  color: $font-color-description;
-}
-
-.detail__value {
-  flex: 1;
-}
-
-.movie__trailer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 80%;
-  background-color: #000;
-  opacity: 0.8;
-  z-index: 1;
-  mask-image: radial-gradient(100vw 80vh at top center, #000000, transparent);
-}
-
-.trailer,
-.poster {
+.movie__background {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-}
-
-.trailer {
-  object-fit: cover;
-  object-position: top;
-  z-index: 1;
-}
-
-.poster {
-  object-position: top;
-  z-index: 2;
-  background-color: $background-color-primary;
+  background-color: change-color($background-color-primary, $alpha: 0.68);
+  mask-image: radial-gradient(100vw 88vh at top center, transparent, black);
+  backdrop-filter: blur(1.6rem);
 }
 </style>

@@ -1,10 +1,23 @@
 import { STEP_REWIND, STEP_VOLUME } from '@/constants/player';
-import { onKeyDown } from '@vueuse/core';
+import { onKeyDown, useImage } from '@vueuse/core';
 
-const usePlayer = (src: string) => {
+type TUsePlayerOption = {
+  isMuted?: boolean;
+  disableContolKey?: boolean;
+  poster?: string;
+};
+
+const usePlayer = (
+  src: string,
+  { isMuted, disableContolKey, poster }: TUsePlayerOption = {}
+) => {
   const video = ref<HTMLVideoElement | null>(null);
   const currentLoaded = ref<number>(0);
+  const posterVisability = ref(!!poster);
 
+  const { isLoading: isLoadingPoster } = useImage({
+    src: poster ?? '',
+  });
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen();
   const { idle } = useIdle(5000);
 
@@ -33,7 +46,9 @@ const usePlayer = (src: string) => {
   const progressBarElem = ref<HTMLElement | null>(null);
   const progressBarState = useMouseInElement(progressBarElem);
   const isActiveProgressBar = computed(
-    () => progressBarState.elementY.value > -210
+    () =>
+      progressBarState.elementY.value >
+      -progressBarState.elementHeight.value * 2
   );
 
   const togglePlaying = () => {
@@ -44,6 +59,10 @@ const usePlayer = (src: string) => {
     currentTime.value = 0;
   };
   const toggleMute = () => {
+    if (isMuted) {
+      muted.value = true;
+      return;
+    }
     muted.value = !muted.value;
     if (!muted.value && volume.value == 0) {
       volume.value = 0.5;
@@ -91,44 +110,50 @@ const usePlayer = (src: string) => {
     currentLoaded.value = buffered.value[nearestBufferIndex][1];
   });
 
-  // watch([duration, video], () => {
-  //   if (duration.value > 0) video.value?.click();
-  // });
-
-  onKeyDown(['а', 'А', 'f', 'F'], (e) => {
-    e.preventDefault();
-    toggleFullscreen();
+  watch([duration, isLoadingPoster], () => {
+    if (duration.value > 0 && isLoadingPoster) posterVisability.value = false;
   });
 
-  onKeyDown(['ArrowLeft', 'MediaTrackPrevious'], (e) => {
-    e.preventDefault();
-    rewindBack();
+  watch(ended, (isEnded) => {
+    if (isEnded) posterVisability.value = true && !!poster;
   });
 
-  onKeyDown(['ArrowRight', 'MediaTrackNext'], (e) => {
-    e.preventDefault();
-    rewindForward();
-  });
+  if (!disableContolKey) {
+    onKeyDown(['а', 'А', 'f', 'F'], (e) => {
+      e.preventDefault();
+      toggleFullscreen();
+    });
 
-  onKeyDown(['ArrowUp'], (e) => {
-    e.preventDefault();
-    volumeUp();
-  });
+    onKeyDown(['ArrowLeft', 'MediaTrackPrevious'], (e) => {
+      e.preventDefault();
+      rewindBack();
+    });
 
-  onKeyDown(['ArrowDown'], (e) => {
-    e.preventDefault();
-    volumeDown();
-  });
+    onKeyDown(['ArrowRight', 'MediaTrackNext'], (e) => {
+      e.preventDefault();
+      rewindForward();
+    });
 
-  onKeyDown([' '], (e) => {
-    e.preventDefault();
-    togglePlaying();
-  });
+    onKeyDown(['ArrowUp'], (e) => {
+      e.preventDefault();
+      volumeUp();
+    });
 
-  onKeyDown(['m', 'M', 'ь', 'Ь'], (e) => {
-    e.preventDefault();
-    toggleMute();
-  });
+    onKeyDown(['ArrowDown'], (e) => {
+      e.preventDefault();
+      volumeDown();
+    });
+
+    onKeyDown([' '], (e) => {
+      e.preventDefault();
+      togglePlaying();
+    });
+
+    onKeyDown(['m', 'M', 'ь', 'Ь'], (e) => {
+      e.preventDefault();
+      toggleMute();
+    });
+  }
 
   return {
     video,
@@ -144,7 +169,9 @@ const usePlayer = (src: string) => {
     isFullscreen,
     progressBarElem,
     isActiveProgressBar,
+    posterVisability,
     idle,
+    isLoadingPoster,
     togglePlaying,
     restart,
     toggleMute,

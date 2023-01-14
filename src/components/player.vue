@@ -1,12 +1,25 @@
 <script setup lang="ts">
-const { name, src } = defineProps<{
+const {
+  name,
+  src = '',
+  poster,
+  mutedPlayer = false,
+  disabledContol = false,
+  coveredScreen = false,
+} = defineProps<{
   name?: string;
-  src: string;
+  src?: string;
+  poster?: string;
+  mutedPlayer?: boolean;
+  disabledContol?: boolean;
+  coveredScreen?: boolean;
 }>();
 
-useHead({
-  title: name,
-});
+if (name) {
+  useHead({
+    title: name,
+  });
+}
 
 const {
   video,
@@ -15,6 +28,7 @@ const {
   volume,
   waiting,
   muted,
+  isLoadingPoster,
   currentTime,
   currentLoaded,
   duration,
@@ -22,78 +36,105 @@ const {
   progressBarElem,
   isActiveProgressBar,
   idle,
+  posterVisability,
   togglePlaying,
   restart,
   toggleMute,
   toggleFullscreen,
   rewindBack,
   rewindForward,
-} = usePlayer(src);
+} = usePlayer(src, {
+  isMuted: mutedPlayer,
+  disableContolKey: disabledContol,
+  poster,
+});
 </script>
 
 <template>
   <div class="player" :tabindex="0" autofocus :class="{ plaeyr_idle: idle }">
     <div class="player__video-block" @click="togglePlaying">
-      <video ref="video" class="player__video" autoplay></video>
-      <Transition name="player">
-        <div class="player__background" v-show="!idle"></div>
-      </Transition>
-      <Transition>
-        <div class="player__loading" v-show="waiting && playing">
-          <FrmLoading />
+      <video
+        ref="video"
+        class="player__video"
+        :class="{ player__video_covered: coveredScreen }"
+        autoplay
+        :muted="mutedPlayer"
+      ></video>
+      <Transition name="movie">
+        <div class="player__poster" v-show="posterVisability">
+          <Transition>
+            <img
+              class="poster"
+              :src="poster"
+              loading="eager"
+              v-show="!isLoadingPoster"
+            />
+          </Transition>
         </div>
       </Transition>
+      <template v-if="!disabledContol">
+        <Transition name="player">
+          <div class="player__background" v-show="!idle"></div>
+        </Transition>
+        <Transition>
+          <div class="player__loading" v-show="waiting && playing">
+            <FrmLoading />
+          </div>
+        </Transition>
+      </template>
     </div>
-    <Transition name="player">
-      <div class="player__header" v-show="!idle">
-        <div class="player__title">{{ name }}</div>
-        <div class="player__control player__control_right"></div>
-      </div>
-    </Transition>
-    <Transition name="player">
-      <div
-        class="player__bar"
-        :class="{ player__bar_active: isActiveProgressBar }"
-        ref="progressBarElem"
-        v-show="!idle"
-      >
-        <!-- <div class="player__setting setting"></div> -->
-        <PlayerProgress
-          class="player__progress"
-          :duration="duration"
-          :progress="currentTime / duration"
-          :loaded="currentLoaded / duration"
-          @update:progress="(value: number) => (currentTime = value * duration)"
-        />
-        <div class="player__controls">
-          <div class="player__control player__control_left">
-            <PlayerVolume
-              :volume="volume"
-              :muted="muted"
-              @update:volume="(value: number) => (volume = value)"
-              @toggleMute="toggleMute"
-            />
-          </div>
-          <div class="player__control player__control_center" v-if="ended">
-            <PlayerControlRestart @restartVideo="restart" />
-          </div>
-          <div class="player__control player__control_center" v-else>
-            <PlayerControlRewind @rewind="rewindBack" />
-            <PlayerControlPlaying
-              :playing="playing"
-              @togglePlaying="togglePlaying"
-            />
-            <PlayerControlRewind @rewind="rewindForward" is-forward />
-          </div>
-          <div class="player__control player__control_right">
-            <PlayerControlFullscreen
-              :fullscreen="isFullscreen"
-              @toggleFullscreen="toggleFullscreen"
-            />
+    <template v-if="!disabledContol">
+      <Transition name="player">
+        <div class="player__header" v-show="!idle">
+          <div class="player__title">{{ name }}</div>
+          <div class="player__control player__control_right"></div>
+        </div>
+      </Transition>
+      <Transition name="player">
+        <div
+          class="player__bar"
+          :class="{ player__bar_active: isActiveProgressBar }"
+          ref="progressBarElem"
+          v-show="!idle"
+        >
+          <!-- <div class="player__setting setting"></div> -->
+          <PlayerProgress
+            class="player__progress"
+            :duration="duration"
+            :progress="currentTime / duration"
+            :loaded="currentLoaded / duration"
+            @update:progress="(value: number) => (currentTime = value * duration)"
+          />
+          <div class="player__controls">
+            <div class="player__control player__control_left">
+              <PlayerVolume
+                :volume="volume"
+                :muted="muted"
+                @update:volume="(value: number) => (volume = value)"
+                @toggleMute="toggleMute"
+              />
+            </div>
+            <div class="player__control player__control_center" v-if="ended">
+              <PlayerControlRestart @restartVideo="restart" />
+            </div>
+            <div class="player__control player__control_center" v-else>
+              <PlayerControlRewind @rewind="rewindBack" />
+              <PlayerControlPlaying
+                :playing="playing"
+                @togglePlaying="togglePlaying"
+              />
+              <PlayerControlRewind @rewind="rewindForward" is-forward />
+            </div>
+            <div class="player__control player__control_right">
+              <PlayerControlFullscreen
+                :fullscreen="isFullscreen"
+                @toggleFullscreen="toggleFullscreen"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </Transition>
+      </Transition>
+    </template>
   </div>
 </template>
 
@@ -110,13 +151,11 @@ $buttons-gap: 2.4rem;
   overflow: hidden;
   top: 0;
   left: 0;
-  z-index: 1;
 }
 
 .player__header,
 .player__bar {
   position: absolute;
-  z-index: 2;
   left: $player-padding;
   width: calc(100% - $player-padding * 2);
 }
@@ -127,7 +166,8 @@ $buttons-gap: 2.4rem;
 
 .player__background,
 .player__video,
-.player__loading {
+.player__loading,
+.player__poster {
   position: absolute;
   top: 0;
   left: 0;
@@ -136,8 +176,23 @@ $buttons-gap: 2.4rem;
   display: flex;
 }
 
+.player__video {
+  object-fit: cover;
+}
+
+.poster {
+  width: 100%;
+  height: 100%;
+  object-position: top;
+  background-color: $background-color-primary;
+}
+
 .player__background {
-  background: radial-gradient(80vw 80vh at center center, transparent, #000000);
+  background: radial-gradient(
+    92vw 92vh at center center,
+    transparent,
+    rgba(0, 0, 0, 0.8)
+  );
 }
 
 .player__loading {
@@ -189,6 +244,10 @@ $buttons-gap: 2.4rem;
 .player__video {
   object-fit: contain;
   transition: filter $animation-time $animation;
+
+  &_covered {
+    object-fit: cover;
+  }
 }
 
 .player__video_seeking {
