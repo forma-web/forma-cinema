@@ -79,6 +79,8 @@ const createCollectionStore =
       return data.value[id];
     };
 
+    const getCollections = () => Object.values(data.value);
+
     const getCollectionMovieIDs = async (id: number) => {
       if (data.value[id]) return data.value[id].movieIDs;
 
@@ -112,16 +114,35 @@ const createCollectionStore =
       return newMovieIDs.sort();
     };
 
+    const getLastestCollectionMovieIDs = async (id: number, amount: number) => {
+      if (!data.value[id] && !(await getCollection(id))) return null;
+
+      while (
+        (data.value[id].isInited === false ||
+          data.value[id].nextCursor !== null) &&
+        (!amount || data.value[id].movieIDs.length < amount)
+      ) {
+        const newMovieIDs = await getNewCollectionMovieIDs(id);
+        if (!newMovieIDs) break;
+      }
+
+      return data.value[id].movieIDs
+        .sort()
+        .slice(0, amount ? amount : data.value[id].movieIDs.length);
+    };
+
     return {
       type,
       data,
       isFinished,
+      getCollections,
       getCollectionIDs,
       setCollection,
       getNewCollections,
       getCollection,
       getCollectionMovieIDs,
       getNewCollectionMovieIDs,
+      getLastestCollectionMovieIDs,
     };
   };
 
