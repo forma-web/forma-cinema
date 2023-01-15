@@ -97,17 +97,17 @@ const usePlayer = (
     }
   };
 
-  watch(buffered, () => {
-    if (buffered.value.length == 0) return;
+  watch(buffered, (buffer) => {
+    if (buffer.length == 0) return;
 
     let nearestBufferIndex = 0;
-    while (nearestBufferIndex < buffered.value.length - 1) {
-      if (buffered.value[nearestBufferIndex + 1][0] > currentTime.value) {
+    while (nearestBufferIndex < buffer.length - 1) {
+      if (buffer[nearestBufferIndex + 1][0] > currentTime.value) {
         break;
       }
       nearestBufferIndex++;
     }
-    currentLoaded.value = buffered.value[nearestBufferIndex][1];
+    currentLoaded.value = buffer[nearestBufferIndex][1];
   });
 
   watch([duration, isLoadingPoster], () => {

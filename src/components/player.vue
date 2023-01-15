@@ -176,6 +176,10 @@ $buttons-gap: 2.4rem;
   display: flex;
 }
 
+.player__poster {
+  background-color: $background-color-primary;
+}
+
 .player__video {
   object-fit: cover;
 }
