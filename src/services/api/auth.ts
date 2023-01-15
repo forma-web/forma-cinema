@@ -36,16 +36,18 @@ export const refresh = () =>
       if (response._data?.meta) setJWTToken(response._data.meta);
     },
 
-    onResponseError() {
-      setJWTToken(null);
-    },
+    // onResponseError() {
+    //   console.log('refresh error');
+
+    //   setJWTToken(null);
+    // },
   });
 
 export const currentUser = async () => {
   const jwt = await useToken();
   if (!jwt) return null;
 
-  return useFetch<TUserResponse, TAuthError>('/me', {
+  return useFetch<TUserResponse, TAuthError>('/user', {
     method: 'GET',
     baseURL,
     headers: {

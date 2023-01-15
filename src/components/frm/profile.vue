@@ -16,7 +16,7 @@ onMounted(async () => await store.getUserData());
 <template>
   <div class="profile">
     <FrmProfileIcon @click="contolVisible = !contolVisible" />
-    <Transition name="opacity">
+    <Transition>
       <FrmProfileControl v-if="contolVisible" ref="contolElement" />
     </Transition>
   </div>

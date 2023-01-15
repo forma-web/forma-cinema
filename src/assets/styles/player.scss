@@ -1,0 +1,91 @@
+$progress-bar-bg: change-color($font-color-description, $alpha: 0.12);
+$progress-line-bg: change-color($font-color-description, $alpha: 0.8);
+$progress-bar-height: 0.4rem;
+$progress-container-height: calc($progress-bar-height * 3);
+$progress-bar-hovered-height: calc($progress-bar-height * 1.5);
+
+.progress__bar-container {
+  position: relative;
+  width: 100%;
+  height: $progress-container-height;
+  display: flex;
+  align-items: center;
+}
+
+.progress-bar {
+  position: relative;
+  height: $progress-bar-height;
+  transition: height $animation-time ease;
+  width: 100%;
+  background-color: $progress-bar-bg;
+  will-change: height;
+
+  &__loaded,
+  &__line,
+  &__hovered {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    will-change: width;
+    transform-origin: 0 center;
+  }
+
+  &__loaded {
+    background-color: $progress-bar-bg;
+    transition: transform $animation-time ease;
+  }
+
+  &__hovered {
+    background-color: $progress-bar-bg;
+  }
+
+  &__line {
+    background-color: $progress-line-bg;
+  }
+
+  &__point,
+  &__point-container {
+    width: $progress-container-height;
+    height: $progress-container-height;
+  }
+
+  &__point-container {
+    position: absolute;
+    top: - $progress-bar-height;
+    left: calc($progress-container-height / -2);
+    will-change: translateX;
+  }
+
+  &__point {
+    scale: 0;
+    border-radius: 50%;
+    transition: scale $animation-time ease;
+    background-color: white;
+    will-change: scale;
+  }
+}
+
+.progress-bar__time-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.8rem;
+}
+
+.progress {
+  position: relative;
+  width: 100%;
+  user-select: none;
+}
+
+.progress_hovered {
+  .progress-bar__line {
+    background-color: white;
+  }
+
+  .progress-bar__point {
+    scale: 1;
+  }
+}

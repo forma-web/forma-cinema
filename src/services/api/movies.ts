@@ -1,4 +1,4 @@
-import { TMoviesResponse } from '@/types/movie';
+import { TMovie, TMoviesResponse } from '@/types/movie';
 
 type TMovieRequestParams = {
   minYear?: number;
@@ -11,13 +11,13 @@ type TMovieRequestParams = {
 const config = useRuntimeConfig();
 const baseURL = `${config.public.apiURL}/movies`;
 
-export const lastesMovies = async (params: TMovieRequestParams = {}) => {
+
+export const getMoviesById = async (id: string) => {
   const jwt = await useToken();
   if (!jwt) return null;
 
-  return useFetch<TMoviesResponse>('/', {
+  return useFetch<TMovie>(`/${id}`, {
     method: 'GET',
-    params,
     baseURL,
     headers: {
       Authorization: jwt,
