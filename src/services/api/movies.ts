@@ -11,8 +11,7 @@ type TMovieRequestParams = {
 const config = useRuntimeConfig();
 const baseURL = `${config.public.apiURL}/movies`;
 
-
-export const getMoviesById = async (id: string) => {
+export const movieById = async (id: number) => {
   const jwt = await useToken();
   if (!jwt) return null;
 

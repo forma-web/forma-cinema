@@ -1,30 +1,20 @@
 import { TMovie } from '@/types/movie';
-import { lastesMovies } from '@/services/api/movies';
-
-type TCollectionMoviesProps = {
-  type: 'genres' | 'selection';
-  id: number;
-};
+import { movieById } from '@/services/api/movies';
 
 export const useMoviesStore = defineStore('moviesStore', () => {
   const data = ref<Record<number, TMovie>>({});
 
-  const getCollectionMovies = async ({ type, id }: TCollectionMoviesProps) => {
-    const movieIDs: number[] = [];
-    const params = { [type]: id };
+  const setMovie = (movie: TMovie) => (data.value[movie.id] = movie);
+  
+  const getMovieById = async (id: number) => {
+    if (data.value[id]) return data.value[id];
 
-    const { data: moviesResp } = (await lastesMovies(params)) ?? {};
-    if (!moviesResp || !moviesResp.value) return movieIDs;
+    const { data: movieData } = (await movieById(id)) ?? {};
+    if (!movieData || !movieData.value) return null;
+    setMovie(movieData.value);
 
-    const { data: moviesData } = moviesResp.value;
-
-    moviesData.forEach((movie) => {
-      if (!data.value.hasOwnProperty(movie.id)) data.value[movie.id] = movie;
-      movieIDs.push(movie.id);
-    });
-
-    return movieIDs;
+    return movieData.value;
   };
 
-  return { data, getCollectionMovies };
+  return { data, setMovie, getMovieById };
 });

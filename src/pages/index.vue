@@ -1,32 +1,36 @@
 <script setup lang="ts">
 import { TCollection } from '@/types/collection';
-import { useGenresStore } from '@/stores/genres';
-import { useMoviesStore } from '@/stores/movies';
+import { useSelectionStore } from '../stores/selections';
+
+const el = ref<HTMLElement | null>(null);
+const selectionStore = useSelectionStore();
 
 const data = ref<TCollection[]>([]);
-const el = ref<HTMLElement | null>(null);
-const genresStore = useGenresStore();
-const moviesStore = useMoviesStore();
 
 const getNewCollections = async () => {
-  if (genresStore.isFinished) return;
-  const newGenreIDs = await genresStore.getNewGenres();
-  newGenreIDs.forEach(async (genreID) => {
-    const genre = genresStore.getGenre(genreID);
-    if (genre === null) return;
-    const movieIDs = await moviesStore.getCollectionMovies({
-      type: 'genres',
-      id: genre.id,
-    });
-    if (!movieIDs.length) return;
+  if (selectionStore.isFinished) return;
+  const newSelectioIDs = await selectionStore.getNewSelections();
+
+  if (!newSelectioIDs) return;
+
+  newSelectioIDs.forEach(async (selectionID) => {
+    const selection = await selectionStore.getSelection(selectionID);
+
+    if (selection === null) return;
+
+    const movieIDs = await selectionStore.getNewSelectionMovieIDs(selection.id);
+    if (!movieIDs) return;
+
     data.value.push({
-      ...genre,
+      id: selection.id,
+      type: 'selection',
+      name: selection.name,
       movieIDs,
     });
   });
 };
 
-useInfiniteScroll(el, getNewCollections, { distance: 0 });
+useInfiniteScroll(document, getNewCollections, { distance: 100 });
 
 onMounted(getNewCollections);
 </script>
@@ -38,7 +42,7 @@ onMounted(getNewCollections);
       :movieIDs="collection.movieIDs"
       :key="collection.id"
       one-row
-      v-for="collection in data"
+      v-for="collection in data.sort((a, b) => a.id - b.id)"
     />
   </div>
 </template>
@@ -46,11 +50,10 @@ onMounted(getNewCollections);
 <style scoped lang="scss">
 .content {
   width: 100%;
-  height: 400px;
 
   display: flex;
   flex-direction: column;
-  row-gap: 2rem;
+  row-gap: 6rem;
   overflow-y: auto;
 }
 </style>

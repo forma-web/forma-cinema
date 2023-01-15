@@ -43,19 +43,6 @@ export const refresh = () =>
     // },
   });
 
-export const currentUser = async () => {
-  const jwt = await useToken();
-  if (!jwt) return null;
-
-  return useFetch<TUserResponse, TAuthError>('/user', {
-    method: 'GET',
-    baseURL,
-    headers: {
-      Authorization: jwt,
-    },
-  });
-};
-
 export const logout = async () => {
   const jwt = await useToken();
   if (!jwt) return null;

@@ -1,6 +1,7 @@
-import { currentUser, logout } from '@/services/api/auth';
+import { logout } from '@/services/api/auth';
 import { TUser } from '@/types/user';
 import { deleteJWTToken } from '@/helpers/jwt';
+import { currentUser } from '@/services/api/user';
 
 export const useUserStore = defineStore('userStore', () => {
   const data = ref<TUser | null>(null);

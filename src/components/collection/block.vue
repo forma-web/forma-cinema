@@ -3,7 +3,6 @@ import { TMovie } from '@/types/movie';
 import { useScroll, useElementSize, useWindowSize } from '@vueuse/core';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 import { vIntersectionObserver } from '@vueuse/components';
-import { useMoviesStore } from '../../stores/movies';
 
 const root = ref<HTMLElement | null>(null);
 
@@ -27,8 +26,6 @@ type TCollectionProps = {
   oneRow?: boolean;
 };
 
-const store = useMoviesStore();
-
 const { title, movieIDs, oneRow } = defineProps<TCollectionProps>();
 </script>
 
@@ -45,8 +42,8 @@ const { title, movieIDs, oneRow } = defineProps<TCollectionProps>();
             { root, threshold: 1 },
           ]"
         >
-          <NuxtLink to="/movie" v-if="store.data.hasOwnProperty(movieID)">
-            <CollectionItem :key="movieID" :movie="store.data[movieID]" />
+          <NuxtLink :to="`/movies/${movieID}`">
+            <CollectionItem :key="movieID" :movieID="movieID" />
           </NuxtLink>
         </li>
       </ul>

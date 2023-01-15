@@ -9,16 +9,18 @@ const details = computed(() => {
   if (movie.value !== null) {
     return DETAILS_DATA.filter((detail) =>
       movie.value?.hasOwnProperty(detail.type)
-    ).map(({ type, label, convert }) => {
-      const movieValue = movie.value?.[type as keyof TMovie];
-      const value =
-        convert && movieValue ? convert(movieValue) : String(movieValue);
-      return {
-        type,
-        label,
-        value,
-      };
-    });
+    )
+      .map(({ type, label, convert }) => {
+        const movieValue = movie.value?.[type as keyof TMovie];
+        const value =
+          convert && movieValue ? convert(movieValue) : String(movieValue);
+        return {
+          type,
+          label,
+          value,
+        };
+      })
+      .filter((detail) => detail.value !== '');
   }
   return [];
 });
