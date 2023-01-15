@@ -20,7 +20,7 @@ const details = computed(() => {
           value,
         };
       })
-      .filter((detail) => detail.value !== '');
+      .filter((detail) => detail.value !== '' && detail.value !== 'null');
   }
   return [];
 });

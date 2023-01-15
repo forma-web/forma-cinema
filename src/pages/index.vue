@@ -1,42 +1,57 @@
 <script setup lang="ts">
 import { TCollection } from '@/types/collection';
-import { useSelectionStore } from '../stores/selections';
-
-const el = ref<HTMLElement | null>(null);
-const selectionStore = useSelectionStore();
+import { useSelectionStore } from '@/stores/selections';
+import { useGenresStore } from '@/stores/genres';
 
 const data = ref<TCollection[]>([]);
 
-const getNewCollections = async () => {
-  if (selectionStore.isFinished) return;
-  const newSelectioIDs = await selectionStore.getNewSelections();
+const stores = [useSelectionStore(), useGenresStore()];
+const currentStoreIndex = ref<number>(0);
+const needCollection = ref<number>(0);
+const processedCollection = ref<number>(0);
 
-  if (!newSelectioIDs) return;
+const updateCollectionList = async () => {
+  while (needCollection.value > processedCollection.value) {
+    if (processedCollection.value === data.value.length) {
+      if (stores[currentStoreIndex.value].isFinished) currentStoreIndex.value++;
+      if (currentStoreIndex.value >= stores.length) return;
 
-  newSelectioIDs.forEach(async (selectionID) => {
-    const selection = await selectionStore.getSelection(selectionID);
+      const store = stores[currentStoreIndex.value];
+      const newCollections = (await store.getNewCollections()) ?? [];
 
-    if (selection === null) return;
+      newCollections.forEach(({ id, name, movieIDs }) => {
+        data.value.push({
+          id,
+          type: store.type,
+          name,
+          movieIDs,
+        });
+      });
+    }
 
-    const movieIDs = await selectionStore.getNewSelectionMovieIDs(selection.id);
-    if (!movieIDs) return;
-
-    data.value.push({
-      id: selection.id,
-      type: 'selection',
-      name: selection.name,
-      movieIDs,
-    });
-  });
+    const collection = data.value[processedCollection.value];
+    const store = stores[currentStoreIndex.value];
+    processedCollection.value++;
+  }
 };
 
-useInfiniteScroll(document, getNewCollections, { distance: 100 });
+useInfiniteScroll(
+  document,
+  () => {
+    needCollection.value += 5;
+    updateCollectionList();
+  },
+  { distance: 0 }
+);
 
-onMounted(getNewCollections);
+onMounted(() => {
+  needCollection.value = 5;
+  updateCollectionList();
+});
 </script>
 
 <template>
-  <div class="content" ref="el">
+  <div class="content">
     <CollectionBlock
       :title="collection.name"
       :movieIDs="collection.movieIDs"
@@ -50,10 +65,8 @@ onMounted(getNewCollections);
 <style scoped lang="scss">
 .content {
   width: 100%;
-
   display: flex;
   flex-direction: column;
   row-gap: 6rem;
-  overflow-y: auto;
 }
 </style>

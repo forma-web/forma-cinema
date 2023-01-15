@@ -1,14 +1,11 @@
 import { TSelection, TSelectionResponse } from '@/types/selection';
 import { TMoviesResponse } from '@/types/movie';
-
-type TColectionRequestParams = {
-  cursor?: string | null;
-};
+import { TCollectionRequestParams } from '@/types/collection';
 
 const config = useRuntimeConfig();
 const baseURL = `${config.public.apiURL}/selections`;
 
-export const allSelections = async (params: TColectionRequestParams = {}) => {
+export const allSelections = async (params: TCollectionRequestParams = {}) => {
   const jwt = await useToken();
   if (!jwt) return null;
 
@@ -37,7 +34,7 @@ export const selectionById = async (id: number) => {
 
 export const selectionMovies = async (
   id: number,
-  params: TColectionRequestParams = {}
+  params: TCollectionRequestParams = {}
 ) => {
   const jwt = await useToken();
   if (!jwt) return null;
