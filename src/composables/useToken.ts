@@ -1,9 +1,9 @@
-import { getJWTToken } from '../helpers/jwt';
+import { getJWTToken } from '@/helpers/jwt';
 
 const useToken = async () => {
   const jwtToken = await getJWTToken();
   if (!jwtToken) {
-    navigateTo('/login');
+    await navigateTo('/login');
     return null;
   }
   return jwtToken;

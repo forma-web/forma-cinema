@@ -1,0 +1,1 @@
+export const COLLECTION_ITEMS_PER_PAGE = 10;

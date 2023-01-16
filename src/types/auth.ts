@@ -13,6 +13,6 @@ export type TAuthError = {
   };
 };
 
-export type TUserResponce = {
+export type TUserResponse = {
   data: TUser;
 };

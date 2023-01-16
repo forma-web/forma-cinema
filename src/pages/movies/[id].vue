@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { getMoviesById } from '@/services/api/movies';
+import { movieById } from '@/services/api/movies';
 import { TMovie } from '@/types/movie';
+import { useMoviesStore } from '@/stores/movies';
 
 const movie = ref<TMovie | null>(null);
 const route = useRoute();
+const moviesStore = useMoviesStore();
 
 onBeforeMount(async () => {
-  const response = await getMoviesById(route.params.id as string);
-  if (response && response.data?.value) {
-    movie.value = response.data.value;
+  const movieData = await moviesStore.getMovieById(Number(route.params.id));
+  if (movieData) {
+    movie.value = movieData;
   } else {
     showError({ statusCode: 404, message: 'Movie not found' });
   }
