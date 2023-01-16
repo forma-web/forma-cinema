@@ -32,6 +32,8 @@ const useMultiForm = <T extends Record<string, any> = Record<string, any>>(
 
   const onSubmit = handleSubmit(async (values, actions) => {
     if (currentStep.value === validationSchema.length - 1) {
+      console.log('submit');
+      
       await submitAction(values, actions, commonError);
     } else {
       currentStep.value += 1;

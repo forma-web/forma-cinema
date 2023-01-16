@@ -13,3 +13,9 @@ export type TMovie = {
   genres?: string[];
   kinopoisk_rating?: number;
 };
+
+export type TMovieForm = {
+  name: string;
+  logline?: string;
+  collection: string[];
+};
