@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserStore } from '../../stores/user';
+import { useUserStore } from '@/stores/user';
 
 const contolVisible = ref(false);
 const contolElement = ref(null);

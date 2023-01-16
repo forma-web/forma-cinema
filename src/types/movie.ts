@@ -1,15 +1,20 @@
+import { TGenre } from './genre';
+import { TPaginationResponse } from './pagination';
+
 export type TMovie = {
   id: number;
   name: string;
-  isSerial: boolean;
   year?: number;
   country?: string;
-  age_restriction?: number;
+  age_restrictions?: number;
   duration?: number;
   logline?: string;
   description?: string;
   poster?: string;
   trailer?: string;
-  genres?: string[];
+  genres?: TGenre[];
+  kinopoisk_id?: number;
   kinopoisk_rating?: number;
 };
+
+export type TMoviesResponse = TPaginationResponse<TMovie>;

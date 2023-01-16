@@ -1,0 +1,22 @@
+@import 'variables';
+
+::-webkit-scrollbar {
+  width: 0.6rem;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: change-color($font-color-description, $alpha: 0.4);
+  transition: background-color $animation-time;
+
+  &:hover {
+    background-color: change-color($font-color-description, $alpha: 0.6);
+  }
+
+  &:active {
+    background-color: change-color($font-color-description, $alpha: 0.8);
+  }
+}

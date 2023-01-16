@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { TMovie } from '@/types/movie';
+import { useMoviesStore } from '@/stores/movies';
 
-const { movie } = defineProps<{ movie: TMovie }>();
-const { name, year, genres, isSerial, kinopoisk_rating, poster } = movie;
+const movieStore = useMoviesStore();
 
-const description = formatMovieDetails(
-  formatYearDetail(year, isSerial),
-  genres
-);
+const movieProps = defineProps<{ movieID: number }>();
+
+const movie = await movieStore.getMovieById(movieProps.movieID);
+const { poster, name, kinopoisk_rating } = movie ?? {};
+
+const description = formatMovieDetails(String(movie?.year));
 </script>
 
 <template>
@@ -15,7 +17,7 @@ const description = formatMovieDetails(
     <MoviePreview :poster="poster" class="movie__preview">
       <FrmRating :rating="kinopoisk_rating" v-if="kinopoisk_rating" />
     </MoviePreview>
-    <MovieInfo :name="name" :details="description" />
+    <MovieInfo :name="name ?? ''" :details="description" />
   </article>
 </template>
 

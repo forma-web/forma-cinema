@@ -20,13 +20,13 @@ function onIntersectionObserver([
 }
 const { x, arrivedState } = useScroll(root, { behavior: 'smooth' });
 
-type TCollection = {
+type TCollectionProps = {
   title?: string;
-  movies: TMovie[];
+  movieIDs: number[];
   oneRow?: boolean;
 };
 
-const { title, movies, oneRow } = defineProps<TCollection>();
+const { title, movieIDs, oneRow } = defineProps<TCollectionProps>();
 </script>
 
 <template>
@@ -36,14 +36,14 @@ const { title, movies, oneRow } = defineProps<TCollection>();
       <ul class="list" :class="{ 'list_one-row': oneRow }" ref="root">
         <li
           class="item"
-          v-for="movie in movies"
+          v-for="movieID in movieIDs"
           v-intersection-observer="[
             onIntersectionObserver,
             { root, threshold: 1 },
           ]"
         >
-          <NuxtLink to="/movie">
-            <CollectionItem :key="movie.id" :movie="movie" />
+          <NuxtLink :to="`/movies/${movieID}`">
+            <CollectionItem :key="movieID" :movieID="movieID" />
           </NuxtLink>
         </li>
       </ul>
