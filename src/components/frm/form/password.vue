@@ -7,9 +7,9 @@ const { name } = defineProps<{ name: string }>();
 </script>
 
 <template>
-  <FrmFormInput
+  <FrmFormField
     :name="name"
-    class="password-input"
+    class="password-field"
     :type="hidePassword ? 'password' : 'text'"
   >
     <button
@@ -20,7 +20,7 @@ const { name } = defineProps<{ name: string }>();
       <EyeIcon v-if="hidePassword" />
       <EyeSlashIcon v-else />
     </button>
-  </FrmFormInput>
+  </FrmFormField>
 </template>
 
 <style scoped lang="scss">

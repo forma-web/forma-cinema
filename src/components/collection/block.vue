@@ -143,7 +143,7 @@ const { title, movies, oneRow } = defineProps<TCollection>();
 
   .item {
     position: relative;
-    width: $width-collection-movie;
+    width: $width-column;
     flex-shrink: 0;
     z-index: 1;
     transition: opacity $animation-time;

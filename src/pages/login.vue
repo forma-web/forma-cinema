@@ -16,7 +16,7 @@ const { meta, onSubmit, commonError } = useMultiForm<TLogin>(
   <form class="auth-form" @submit="onSubmit">
     <h3>Вход</h3>
     <fieldset class="auth-form__fieldset">
-      <FrmFormInput placeholder="Email" name="email" />
+      <FrmFormField placeholder="Email" name="email" />
       <FrmFormPassword placeholder="Пароль" name="password" />
     </fieldset>
     <FrmFormError :error="commonError" v-if="!meta.dirty" />

@@ -24,7 +24,7 @@ const description = formatMovieDetails(
   position: absolute;
   top: 0;
   left: 0;
-  width: $width-collection-movie;
+  width: $width-column;
   font-size: 1.8rem;
   display: flex;
   flex-direction: column;

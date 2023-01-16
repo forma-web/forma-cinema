@@ -12,6 +12,6 @@
 
 .auth {
   margin: auto;
-  width: 40rem;
+  width: $width-column;
 }
 </style>

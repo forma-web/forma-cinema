@@ -1,8 +1,8 @@
 <template>
   <h3>Как вас зовут?</h3>
   <fieldset class="auth-form__fieldset">
-    <FrmFormInput placeholder="Имя" name="first_name" />
-    <FrmFormInput placeholder="Фамилия" name="last_name" />
+    <FrmFormField placeholder="Имя" name="first_name" />
+    <FrmFormField placeholder="Фамилия" name="last_name" />
   </fieldset>
   <fieldset class="auth-form__fieldset">
     <FrmFormButton type="submit">Дальше</FrmFormButton>

@@ -21,7 +21,7 @@ $padding-header: calc($padding-wrapper / 3.6);
 $border-radius: 0.6rem;
 
 $movies-in-collection: 4;
-$width-collection-movie: calc(
+$width-column: calc(
   (100% - ($movies-in-collection - 1) * 1em) / $movies-in-collection
 );
 
