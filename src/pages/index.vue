@@ -2,6 +2,7 @@
 import { TCollection } from '@/types/collection';
 import { useSelectionStore } from '@/stores/selections';
 import { useGenresStore } from '@/stores/genres';
+import { COLLECTION_ITEMS_PER_PAGE } from '@/constants/collection';
 
 const data = ref<TCollection[]>([]);
 const dataRender = computed(() =>
@@ -24,47 +25,52 @@ const addCollectionToData = ({ id, name, movieIDs }: TCollection) => {
   });
 };
 
-const initCollectionFromStore = async () => {
+const getCollections = async (isInit = false) => {
   const store = stores[currentStoreIndex.value];
-  const newCollections = store.getCollections();
+  const newCollections =
+    (isInit ? store.getCollections() : await store.getNewCollections()) ?? [];
+
   newCollections.forEach(addCollectionToData);
-  processedCollection.value = data.value.length;
 };
 
 const updateCollectionList = async () => {
   isLoading.value = true;
-  while (needCollection.value > processedCollection.value) {
-    if (processedCollection.value === 0) {
-      initCollectionFromStore();
-    }
 
+  if (processedCollection.value === 0) {
+    await getCollections(true);
+  }
+
+  while (
+    needCollection.value > processedCollection.value &&
+    !isFinished.value
+  ) {
     if (processedCollection.value === data.value.length) {
       if (stores[currentStoreIndex.value].isFinished) {
         if (++currentStoreIndex.value === stores.length) {
           isFinished.value = true;
-          isLoading.value = false;
-          return;
+          break;
         }
-        initCollectionFromStore();
+        await getCollections(true);
+      } else {
+        await getCollections();
       }
-
-      const store = stores[currentStoreIndex.value];
-      const newCollections = (await store.getNewCollections()) ?? [];
-
-      newCollections.forEach(addCollectionToData);
     }
 
     const collection = data.value[processedCollection.value];
     const store = stores[currentStoreIndex.value];
 
-    console.log('collection', collection);
-
-    const movieIDs =
-      (await store.getLastestCollectionMovieIDs(collection.id, 10)) ?? [];
-    data.value[processedCollection.value].movieIDs = movieIDs;
+    if (collection.movieIDs.length < COLLECTION_ITEMS_PER_PAGE) {
+      const movieIDs =
+        (await store.getLastestCollectionMovieIDs(
+          collection.id,
+          COLLECTION_ITEMS_PER_PAGE
+        )) ?? [];
+      data.value[processedCollection.value].movieIDs = movieIDs;
+    }
 
     processedCollection.value++;
   }
+
   isLoading.value = false;
 };
 

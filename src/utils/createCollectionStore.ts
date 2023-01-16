@@ -135,6 +135,7 @@ const createCollectionStore =
       type,
       data,
       isFinished,
+      isInited,
       getCollections,
       getCollectionIDs,
       setCollection,
