@@ -27,6 +27,7 @@ const addCollectionToData = ({ id, name, movieIDs }: TCollection) => {
 
 const getCollections = async (isInit = false) => {
   const store = stores[currentStoreIndex.value];
+
   const newCollections =
     (isInit ? store.getCollections() : await store.getNewCollections()) ?? [];
 
@@ -46,20 +47,23 @@ const updateCollectionList = async () => {
   ) {
     if (processedCollection.value === data.value.length) {
       if (stores[currentStoreIndex.value].isFinished) {
-        if (++currentStoreIndex.value === stores.length) {
+        if (++currentStoreIndex.value === stores.length) {          
           isFinished.value = true;
           break;
         }
         await getCollections(true);
+        continue;
       } else {
         await getCollections();
+        continue;
       }
     }
 
     const collection = data.value[processedCollection.value];
+
     const store = stores[currentStoreIndex.value];
 
-    if (collection.movieIDs.length < COLLECTION_ITEMS_PER_PAGE) {
+    if (collection?.movieIDs.length < COLLECTION_ITEMS_PER_PAGE) {
       const movieIDs =
         (await store.getLastestCollectionMovieIDs(
           collection.id,
@@ -76,11 +80,11 @@ const updateCollectionList = async () => {
 
 useInfiniteScroll(
   document,
-  () => {
+  async () => {
     needCollection.value += 5;
-    if (!isFinished) updateCollectionList();
+    if (!isFinished) await updateCollectionList();
   },
-  { distance: 0 }
+  { distance: 1000 }
 );
 
 onMounted(() => {
