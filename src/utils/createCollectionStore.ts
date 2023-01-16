@@ -131,6 +131,8 @@ const createCollectionStore =
         .slice(0, amount ? amount : data.value[id].movieIDs.length);
     };
 
+    const destroy = () => (data.value = {});
+
     return {
       type,
       data,
@@ -144,6 +146,7 @@ const createCollectionStore =
       getCollectionMovieIDs,
       getNewCollectionMovieIDs,
       getLastestCollectionMovieIDs,
+      destroy,
     };
   };
 

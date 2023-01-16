@@ -2,6 +2,9 @@ import { logout } from '@/services/api/auth';
 import { TUser } from '@/types/user';
 import { deleteJWTToken } from '@/helpers/jwt';
 import { currentUser } from '@/services/api/user';
+import { useMoviesStore } from './movies';
+import { useGenresStore } from './genres';
+import { useSelectionStore } from './selections';
 
 export const useUserStore = defineStore('userStore', () => {
   const data = ref<TUser | null>(null);
@@ -24,8 +27,13 @@ export const useUserStore = defineStore('userStore', () => {
   const logoutUser = async () => {
     data.value = null;
     await logout();
+
     deleteJWTToken();
-    navigateTo('/login');
+    useMoviesStore().destroy();
+    useGenresStore().destroy();
+    useSelectionStore().destroy();
+
+    await navigateTo('/login');
   };
 
   return { data, username, setUserData, getUserData, logoutUser };

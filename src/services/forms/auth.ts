@@ -25,7 +25,7 @@ const onAuth =
       store.setUserData(userData);
       
       setJWTToken(meta);
-      navigateTo('/');
+      await navigateTo('/');
     } else if (error.value) {
       setFormErrors(error.value, values, actions, commonError);
     }

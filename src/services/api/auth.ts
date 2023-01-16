@@ -1,5 +1,5 @@
-import { TAuth, TAuthError, TUserResponse } from '@/types/auth';
-import { getJWTData, getJWTToken, setJWTToken } from '@/helpers/jwt';
+import { TAuth, TAuthError } from '@/types/auth';
+import { getJWTData, setJWTToken } from '@/helpers/jwt';
 import { TAuthMeta } from '@/types/token';
 
 const config = useRuntimeConfig();

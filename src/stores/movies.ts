@@ -5,7 +5,7 @@ export const useMoviesStore = defineStore('moviesStore', () => {
   const data = ref<Record<number, TMovie>>({});
 
   const setMovie = (movie: TMovie) => (data.value[movie.id] = movie);
-  
+
   const getMovieById = async (id: number) => {
     if (data.value[id]) return data.value[id];
 
@@ -16,5 +16,7 @@ export const useMoviesStore = defineStore('moviesStore', () => {
     return movieData.value;
   };
 
-  return { data, setMovie, getMovieById };
+  const destroy = () => (data.value = {});
+
+  return { data, setMovie, getMovieById, destroy };
 });
