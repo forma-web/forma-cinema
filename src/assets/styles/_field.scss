@@ -10,7 +10,7 @@
   position: relative;
   width: 100%;
 }
-.filed {
+.field {
   width: 100%;
   border-radius: 0.8rem;
   color: $font-color-primary;
@@ -21,6 +21,10 @@
   border: $border-line $input-color;
   transition: border-color $animation-time;
   outline: none;
+
+  &::placeholder {
+    color: $input-placeholder-color;
+  }
 
   &_textarea {
     resize: none;
@@ -34,7 +38,25 @@
 
   &:active,
   &:focus {
-    border-color: white;
+    border-color: $font-color-primary;
+  }
+
+  &_select {
+    text-align: left;
+    color: $input-placeholder-color;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 0.8rem;
+
+    &:hover,
+    &:active {
+      scale: none;
+    }
+
+    &:focus {
+      color: $input-placeholder-color;
+    }
   }
 
   &_error {
@@ -47,8 +69,7 @@
     }
   }
 }
-
-.password-filed {
+.password-field {
   padding-right: 3em;
 }
 

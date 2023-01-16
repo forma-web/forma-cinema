@@ -8,14 +8,14 @@ export default {
 import { useField } from 'vee-validate';
 import { RuleExpression } from 'vee-validate';
 
-type TfiledProps = {
+type TFieldProps = {
   label?: string;
   name: string;
   rules?: RuleExpression<string>;
   multiline?: boolean;
 };
 
-const { label = '', name, rules, multiline } = defineProps<TfiledProps>();
+const { label = '', name, rules, multiline } = defineProps<TFieldProps>();
 const { value, errorMessage: error } = useField<string>(name, rules);
 
 const { textarea, input } = useTextareaAutosize({
@@ -31,16 +31,16 @@ const { textarea, input } = useTextareaAutosize({
     <div class="label__block">
       <textarea
         ref="textarea"
-        class="filed filed_textarea"
-        :class="{ filed_error: error }"
+        class="field field_textarea"
+        :class="{ field_error: error }"
         v-model="input"
         v-bind="$attrs"
         v-if="multiline"
       ></textarea>
       <input
         type="text"
-        class="filed"
-        :class="{ filed_error: error }"
+        class="field"
+        :class="{ field_error: error }"
         v-model="value"
         v-bind="$attrs"
         v-else

@@ -13,6 +13,7 @@ $color-rating-good: #39b026;
 $color-rating-great: linear-gradient(116.45deg, #eafb2a 0%, #e7a82e 100%);
 $font-color-rating-great: #362804;
 $input-color: change-color($font-color-description, $alpha: 0.4);
+$input-placeholder-color: change-color($font-color-description, $alpha: 0.8);
 
 $padding-wrapper: 7rem;
 $height-header: 4rem;
