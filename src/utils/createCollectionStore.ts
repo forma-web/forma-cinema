@@ -2,7 +2,7 @@ import { TCollectionRequestParams, TCollectionStore } from '@/types/collection';
 import { _AsyncData } from 'nuxt/dist/app/composables/asyncData';
 import { TPaginationResponse } from '@/types/pagination';
 import { useMoviesStore } from '@/stores/movies';
-import { TMoviesResponse } from '../types/movie';
+import { TMoviesResponse } from '@/types/movie';
 
 type TCollectionStoreProps<T> = {
   type: string;
