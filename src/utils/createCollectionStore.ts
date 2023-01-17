@@ -71,15 +71,23 @@ const createCollectionStore =
     const getCollection = async (id: number) => {
       if (data.value[id]) return data.value[id];
 
-      const { data: Collection } = (await collectionByIdFetch(id)) ?? {};
-      if (!Collection || !Collection.value) return null;
+      const { data: collection } = (await collectionByIdFetch(id)) ?? {};
+      if (!collection || !collection.value) return null;
 
-      setCollection(Collection.value);
+      setCollection(collection.value);
 
       return data.value[id];
     };
 
     const getCollections = () => Object.values(data.value);
+
+    const getAllCollections = async () => {
+      while (!isFinished.value) {
+        await getNewCollections();
+      }
+
+      return getCollections();
+    };
 
     const getCollectionMovieIDs = async (id: number) => {
       if (data.value[id]) return data.value[id].movieIDs;
@@ -131,6 +139,14 @@ const createCollectionStore =
         .slice(0, amount ? amount : data.value[id].movieIDs.length);
     };
 
+    const getOptions = async () => {
+      const collections = await getAllCollections();
+      return collections.map((collection) => ({
+        value: collection.id,
+        label: collection.name,
+      }));
+    };
+
     const destroy = () => (data.value = {});
 
     return {
@@ -139,6 +155,7 @@ const createCollectionStore =
       isFinished,
       isInited,
       getCollections,
+      getAllCollections,
       getCollectionIDs,
       setCollection,
       getNewCollections,
@@ -146,6 +163,7 @@ const createCollectionStore =
       getCollectionMovieIDs,
       getNewCollectionMovieIDs,
       getLastestCollectionMovieIDs,
+      getOptions,
       destroy,
     };
   };

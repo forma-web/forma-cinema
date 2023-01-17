@@ -16,7 +16,7 @@ type TSelectProps = {
   options: (
     | {
         value: string | number;
-        label: string;
+        label: string | number;
       }
     | string
     | number
@@ -24,23 +24,25 @@ type TSelectProps = {
   placeholder?: string;
 };
 
+const props = defineProps<TSelectProps>();
+
 const {
   label = '',
   name,
   rules,
-  options,
   multiselect = false,
-  initialValue = [],
   placeholder = 'Выберите значение',
   isAmountSelectedText,
   max,
   required = false,
-} = defineProps<TSelectProps>();
+} = props;
+
+const { options, initialValue } = toRefs(props);
 
 const optionList = computed(() => {
-  if (options.length === 0) return [];
+  if (options.value.length === 0) return [];
 
-  return options.map((option) => {
+  return options.value.map((option) => {
     if (typeof option === 'string' || typeof option === 'number') {
       return {
         value: option,
@@ -62,7 +64,7 @@ const { value, errorMessage: error } = useField<(string | number)[]>(
   name,
   rules,
   {
-    initialValue,
+    initialValue: initialValue?.value ?? [],
   }
 );
 

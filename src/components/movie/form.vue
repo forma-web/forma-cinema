@@ -3,8 +3,12 @@ import { TMovieForm } from '@/types/movie';
 import countries from '@/constants/countries';
 import { MOVIE_VALIDATION_SCHEMES } from '@/constants/forms';
 import { AGES_OPTIONS } from '@/constants/ages';
+import { useSelectionStore } from '@/stores/selections';
+import { useGenresStore } from '@/stores/genres';
+import { TOption } from '@/types/select';
 
-const options = ['Гарри Поттер', 'Бурунов', 'Ди Каприо'];
+const selectionOptions = ref<TOption[]>([]);
+const genreOptions = ref<TOption[]>([]);
 
 const onMovieFormSubmit = (data: TMovieForm) => {
   console.log(data);
@@ -14,6 +18,11 @@ const { onSubmit } = useMultiForm<TMovieForm>(
   onMovieFormSubmit,
   MOVIE_VALIDATION_SCHEMES
 );
+
+onMounted(async () => {
+  selectionOptions.value = await useSelectionStore().getOptions();
+  genreOptions.value = await useGenresStore().getOptions();
+});
 </script>
 
 <template>
@@ -37,7 +46,7 @@ const { onSubmit } = useMultiForm<TMovieForm>(
         <FrmFormSelect
           name="collections"
           label="Коллекции"
-          :options="options"
+          :options="selectionOptions"
           multiselect
           placeholder="Выберите колекцию"
           is-amount-selected-text
@@ -49,7 +58,7 @@ const { onSubmit } = useMultiForm<TMovieForm>(
           <FrmFormSelect
             name="genres"
             label="Жанры"
-            :options="options"
+            :options="genreOptions"
             :max="3"
             multiselect
             placeholder="Выберите жанры (максимум 3)"

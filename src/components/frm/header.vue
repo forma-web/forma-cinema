@@ -10,7 +10,7 @@ const { disabledProfile = false } = defineProps<{
       <FrmLogo />
     </NuxtLink>
     <div>
-      <!-- <FrmProfile class="header__item" v-if="!disabledProfile" /> -->
+      <FrmProfile class="header__item" v-if="!disabledProfile" />
     </div>
   </div>
 </template>
