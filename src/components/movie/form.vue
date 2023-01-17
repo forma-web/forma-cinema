@@ -85,7 +85,9 @@ onMounted(async () => {
         <FrmFormButton is-seconadary>Отменить</FrmFormButton>
       </div>
     </div>
-    <div class="movie-form__content"></div>
+    <div class="movie-form__content">
+      <FrmFormUpload />
+    </div>
   </form>
 </template>
 
@@ -96,7 +98,7 @@ onMounted(async () => {
   align-self: center;
   justify-content: center;
   display: flex;
-  column-gap: 1.6em;
+  column-gap: 6.4em;
 }
 
 .movie-form__mediadata,

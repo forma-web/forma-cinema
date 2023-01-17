@@ -1,5 +1,19 @@
+<script setup lang="ts">
+const { isSmall = false, isSecondary = false } = defineProps<{
+  isSmall?: boolean;
+  isSecondary?: boolean;
+}>();
+</script>
+
 <template>
-  <button class="movie__button">
+  <button
+    class="movie__button"
+    :class="{
+      movie__button_small: isSmall,
+      movie__button_secondary: isSecondary,
+    }"
+    type="button"
+  >
     <slot></slot>
   </button>
 </template>
@@ -22,6 +36,17 @@
 
   &:active {
     scale: $scale-down;
+  }
+
+  &_small {
+    padding: 1em 1.6em 1.1em;
+    font-size: 1.6rem;
+  }
+
+  &_secondary {
+    font-weight: 400;
+    background-color: change-color($background-color-primary, $alpha: 0.6);
+    color: $font-color-primary;
   }
 }
 </style>
