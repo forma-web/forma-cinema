@@ -14,4 +14,9 @@ const AGES_RESTRICTIONS = [
   Ages.EIGHTEEN,
 ];
 
+export const AGES_OPTIONS = AGES_RESTRICTIONS.map((age) => ({
+  value: age,
+  label: `${age}+`,
+}));
+
 export default AGES_RESTRICTIONS;

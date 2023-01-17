@@ -2,6 +2,7 @@
 import { TMovieForm } from '@/types/movie';
 import countries from '@/constants/countries';
 import { MOVIE_VALIDATION_SCHEMES } from '@/constants/forms';
+import { AGES_OPTIONS } from '@/constants/ages';
 
 const options = ['Гарри Поттер', 'Бурунов', 'Ди Каприо'];
 
@@ -42,23 +43,34 @@ const { onSubmit } = useMultiForm<TMovieForm>(
           is-amount-selected-text
         />
       </div>
-      <div class="mediadata__fieldset">
-        <FrmFormField name="year" placeholder="Укажите год" label="Год" />
-        <FrmFormSelect
-          name="genres"
-          label="Жанры"
-          :options="options"
-          multiselect
-          placeholder="Выберите жанр"
-        />
-        <FrmFormSelect
-          name="countries"
-          label="Страны"
-          :options="countries"
-          multiselect
-          placeholder="Выберите страну"
-        />
-      </div>
+      <FrmFormDropDown title="Дополнительно">
+        <div class="mediadata__fieldset">
+          <FrmFormField name="year" placeholder="Укажите год" label="Год" />
+          <FrmFormSelect
+            name="genres"
+            label="Жанры"
+            :options="options"
+            :max="3"
+            multiselect
+            placeholder="Выберите жанры (максимум 3)"
+          />
+          <FrmFormSelect
+            name="age_restriction"
+            label="Возрастое ограничение"
+            :options="AGES_OPTIONS"
+            :required="false"
+            placeholder="Выберите возрастное ограничение"
+          />
+          <FrmFormSelect
+            name="countries"
+            label="Страны"
+            :options="countries"
+            :max="3"
+            multiselect
+            placeholder="Выберите страны (максимум 3)"
+          />
+        </div>
+      </FrmFormDropDown>
       <div class="mediadata__fieldset">
         <FrmFormButton type="submit">Сохранить</FrmFormButton>
         <FrmFormButton is-seconadary>Отменить</FrmFormButton>
@@ -83,12 +95,12 @@ const { onSubmit } = useMultiForm<TMovieForm>(
   width: $width-column;
   display: flex;
   flex-direction: column;
-  row-gap: 3.6em;
+  row-gap: 4em;
 }
 
 .mediadata__fieldset {
   width: 100%;
-  row-gap: 1em;
+  row-gap: 1.2em;
 }
 
 .movie-form__content {

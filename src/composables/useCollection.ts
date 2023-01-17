@@ -10,10 +10,13 @@ const useCollection = () => {
   );
 
   const { height } = useWindowSize();
+
   const stores = [useSelectionStore(), useGenresStore()];
   const currentStoreIndex = ref<number>(0);
+  
   const needCollection = ref<number>(0);
   const processedCollection = ref<number>(0);
+
   const isLoading = ref<boolean>(false);
   const isFinished = ref<boolean>(false);
 

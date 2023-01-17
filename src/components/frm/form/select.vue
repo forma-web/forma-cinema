@@ -1,21 +1,25 @@
 <script setup lang="ts">
-import { RuleExpression, useField } from 'vee-validate';
+import { useField } from 'vee-validate';
 import { plural } from '@/utils/plural';
-import { ChevronDownIcon } from '@heroicons/vue/24/outline';
+import { RuleExpression } from 'vee-validate';
 
 type TSelectProps = {
   label?: string;
   name: string;
   multiselect?: boolean;
-  rules?: RuleExpression<string[]>;
-  initialValue?: string[];
+  rules?: RuleExpression<(string | number)[]>;
+  initialValue?: (string | number)[];
   isAmountSelectedText?: boolean;
+  max?: number;
+  required?: boolean;
+
   options: (
     | {
-        value: string;
+        value: string | number;
         label: string;
       }
     | string
+    | number
   )[];
   placeholder?: string;
 };
@@ -29,13 +33,15 @@ const {
   initialValue = [],
   placeholder = 'Выберите значение',
   isAmountSelectedText,
+  max,
+  required = false,
 } = defineProps<TSelectProps>();
 
 const optionList = computed(() => {
   if (options.length === 0) return [];
 
   return options.map((option) => {
-    if (typeof option === 'string') {
+    if (typeof option === 'string' || typeof option === 'number') {
       return {
         value: option,
         label: option,
@@ -48,16 +54,27 @@ const optionList = computed(() => {
 const selectContainer = ref<HTMLElement | null>(null);
 const isActive = ref(false);
 
-onClickOutside(selectContainer, (event) => {
-  event.stopPropagation();
+onClickOutside(selectContainer, () => {
   isActive.value = false;
 });
 
-const { value, errorMessage: error } = useField<string[]>(name, rules, {
-  initialValue,
-});
+const { value, errorMessage: error } = useField<(string | number)[]>(
+  name,
+  rules,
+  {
+    initialValue,
+  }
+);
 
-const changeValue = (option: string) => {
+const maxReached = computed(
+  () => max !== undefined && max === value.value.length
+);
+
+const changeValue = (option: string | number) => {
+  if (option === '') {
+    value.value = [];
+    return;
+  }
   if (!multiselect) {
     value.value = [option];
     isActive.value = false;
@@ -72,15 +89,23 @@ const changeValue = (option: string) => {
 
 const selectText = computed(() => {
   if (value.value.length === 0) return placeholder;
-  if (!multiselect || value.value.length === 1) return value.value[0];
+  const selected = optionList.value
+    .filter((option) => value.value.includes(option.value))
+    .map((option) => option.label);
+  if (!multiselect || selected.length === 1) return selected[0];
   if (isAmountSelectedText)
-    return `${value.value.length} ${plural(value.value.length, [
+    return `${selected.length} ${plural(selected.length, [
       'выбран',
       'выбрано',
       'выбрано',
     ])}`;
-  return value.value.join(', ');
+  return selected.join(', ');
 });
+
+const isActiveOption = (option: string | number) => {
+  if (!multiselect) return value.value[0] === option;
+  return value.value.includes(option);
+};
 </script>
 
 <template>
@@ -98,47 +123,49 @@ const selectText = computed(() => {
     <div class="select__container">
       <button
         class="field field_select"
+        :class="{ field_error: error }"
         type="button"
         @click="isActive = !isActive"
       >
         <div class="select__text">
           {{ selectText }}
         </div>
-        <ChevronDownIcon
-          class="chevron"
-          :class="{ chevron_active: isActive }"
-        />
+        <FrmFormChevron :isActive="isActive" />
       </button>
-      <div class="select__content" ref="selectContainer" v-if="isActive">
-        <ul class="select__options options">
-          <li
-            class="options__item"
-            :key="option.value"
-            v-for="option in optionList"
-          >
-            <label
-              class="option"
-              :class="{
-                option_active: value.includes(option.value),
-              }"
+      <div class="select__content" ref="selectContainer" v-show="isActive">
+        <div class="select__options">
+          <ul class="options">
+            <li
+              class="options__item options__item_empty"
+              v-if="!multiselect && !required"
             >
-              <button
-                class="option__button"
-                type="button"
-                @click="changeValue(option.value)"
-              >
-                <div class="select__text">
-                  {{ option.label }}
-                </div>
-                <FrmFormCheckbox
-                  :checked="value.includes(option.value)"
-                  v-if="multiselect"
-                />
-              </button>
-            </label>
-          </li>
-        </ul>
+              <FrmFormOption
+                value=""
+                label="Не выбрано"
+                :is-active="value.length === 0"
+                @change="changeValue"
+              />
+            </li>
+            <li
+              class="options__item"
+              :key="option.value"
+              v-for="option in optionList"
+            >
+              <FrmFormOption
+                :label="option.label"
+                :value="option.value"
+                :is-active="isActiveOption(option.value)"
+                :checkboxVisible="multiselect"
+                :is-disabled="maxReached && !isActiveOption(option.value)"
+                @change="changeValue"
+              />
+            </li>
+          </ul>
+        </div>
       </div>
+    </div>
+    <div class="description error" v-if="error && !isActive">
+      {{ error }}
     </div>
   </div>
 </template>
@@ -158,9 +185,9 @@ const selectText = computed(() => {
   }
 
   &__options {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+    max-height: calc($height-select * $count-options);
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   &_active {
@@ -185,62 +212,24 @@ const selectText = computed(() => {
   }
 }
 
-.options__item {
+.options {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  position: relative;
-  display: inline-flex;
-  border-bottom: $border-line $input-color;
 
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.option {
-  width: 100%;
-  position: relative;
-  text-align: left;
-  font-size: 1.8rem;
-  cursor: pointer;
-  user-select: none;
-
-  &__button {
-    padding: 0.8em 1em;
+  &__item {
     width: 100%;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    column-gap: 0.8em;
+    position: relative;
+    display: inline-flex;
+    border-bottom: $border-line $input-color;
 
-    &:hover {
-      scale: 1.01;
+    &_empty .option {
+      opacity: 0.36;
     }
 
-    &:active {
-      scale: 0.99;
+    &:last-child {
+      border-bottom: none;
     }
-  }
-
-  &_active {
-    background-color: change-color($input-color, $alpha: 0.2);
-  }
-
-  &:hover,
-  &:active {
-    background-color: $input-color;
-    scale: none;
-  }
-}
-
-.chevron {
-  width: 1.2em;
-  transition: rotate $animation-time;
-  position: relative;
-  top: 0.1em;
-
-  &_active {
-    rotate: 180deg;
   }
 }
 </style>

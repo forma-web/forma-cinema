@@ -7,4 +7,3 @@ localizeValidationForm();
     <NuxtPage />
   </NuxtLayout>
 </template>
-
