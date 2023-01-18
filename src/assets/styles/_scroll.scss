@@ -9,14 +9,14 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: change-color($font-color-description, $alpha: 0.4);
-  transition: background-color $animation-time;
+  background-color: var(--color-secondary-4);
+  transition: background-color var(--animation-duration);
 
   &:hover {
-    background-color: change-color($font-color-description, $alpha: 0.6);
+    background-color: var(--color-secondary-6);
   }
 
   &:active {
-    background-color: change-color($font-color-description, $alpha: 0.8);
+    background-color: var(--color-secondary-8);
   }
 }

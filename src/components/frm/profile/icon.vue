@@ -10,18 +10,18 @@ import { UserIcon } from '@heroicons/vue/24/solid';
 
 <style scoped lang="scss">
 .profile-button {
-  width: $height-header;
-  height: $height-header;
+  width: var(--height-header);
+  height: var(--height-header);
   border-radius: 100%;
-  background-color: change-color($font-color-description, $alpha: 0.4);
+  background-color: var(--color-secondary-4);
   display: flex;
   opacity: 0.8;
-  transition: opacity $animation-time ease;
+  transition: opacity var(--animation-duration) ease;
 
   &__icon {
-    width: calc($height-header / 2.56);
+    width: calc(var(--height-header) / 2.56);
     margin: auto;
-    color: $font-color-primary;
+    color: var(--color-primary);
   }
 
   &:hover {

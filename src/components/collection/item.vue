@@ -31,6 +31,6 @@ const description = formatMovieDetails(String(movie?.year));
 }
 
 .movie__preview {
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
 }
 </style>

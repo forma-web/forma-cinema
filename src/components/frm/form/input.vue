@@ -54,18 +54,17 @@ const { value, errorMessage: error } = useField<string>(name, rules);
 }
 .input {
   width: 100%;
-  border-radius: 0.8rem;
-  color: $font-color-primary;
+  border-radius: var(--border-radius);
+  color: var(--color-primary);
   font-size: 1.8rem;
   padding: 1em;
   background-color: transparent;
-  border-radius: $border-radius;
-  border: $border-line $input-color;
-  transition: border-color $animation-time;
+  border: var(--border-line) var(--color-input);
+  transition: border-color var(--animation-duration);
   outline: none;
 
   &:hover {
-    border-color: $font-color-description;
+    border-color: var(--color-secondary);
   }
 
   &:active,
@@ -74,12 +73,12 @@ const { value, errorMessage: error } = useField<string>(name, rules);
   }
 
   &_error {
-    border-color: $error-color;
+    border-color: var(--color-error);
 
     &:hover,
     &:active,
     &:focus {
-      border-color: $error-color;
+      border-color: var(--color-error);
     }
   }
 }
@@ -101,7 +100,7 @@ const { value, errorMessage: error } = useField<string>(name, rules);
 }
 
 .error {
-  color: $error-color;
+  color: var(--color-error);
   margin-bottom: 0.2em;
 }
 </style>

@@ -80,7 +80,7 @@ const { title, movieIDs, oneRow } = defineProps<TCollectionProps>();
 
 .title {
   width: 100%;
-  padding: 0 $padding-wrapper;
+  padding: 0 var(--padding-wrapper);
 }
 .carousel {
   width: 100%;
@@ -92,9 +92,9 @@ const { title, movieIDs, oneRow } = defineProps<TCollectionProps>();
   position: absolute;
   top: 0;
   opacity: 0;
-  width: $padding-wrapper;
+  width: var(--padding-wrapper);
   height: 100%;
-  transition: opacity $animation-time;
+  transition: opacity var(--animation-duration);
   cursor: pointer;
   z-index: 2;
   display: flex;
@@ -109,7 +109,7 @@ const { title, movieIDs, oneRow } = defineProps<TCollectionProps>();
 }
 
 .icon {
-  width: calc($padding-wrapper / 1.2);
+  width: calc(var(--padding-wrapper) / 1.2);
   margin: auto;
 }
 
@@ -117,7 +117,7 @@ const { title, movieIDs, oneRow } = defineProps<TCollectionProps>();
   position: relative;
   width: 100%;
   display: flex;
-  padding: 0 $padding-wrapper;
+  padding: 0 var(--padding-wrapper);
   flex-wrap: wrap;
   column-gap: 1em;
   row-gap: 2.5em;
@@ -126,7 +126,7 @@ const { title, movieIDs, oneRow } = defineProps<TCollectionProps>();
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     overscroll-behavior-x: contain;
-    scroll-padding: 0 $padding-wrapper;
+    scroll-padding: 0 var(--padding-wrapper);
     flex-wrap: nowrap;
 
     &::-webkit-scrollbar {
@@ -143,13 +143,13 @@ const { title, movieIDs, oneRow } = defineProps<TCollectionProps>();
 
   .item {
     position: relative;
-    width: $width-collection-movie;
+    width: var(--width-columns);
     flex-shrink: 0;
     z-index: 1;
-    transition: opacity $animation-time;
+    transition: opacity var(--animation-duration);
 
     &_disabled {
-      opacity: $opacity;
+      opacity: var(--opacity);
     }
   }
 }
@@ -166,7 +166,7 @@ const { title, movieIDs, oneRow } = defineProps<TCollectionProps>();
   }
 
   .item_disabled {
-    opacity: $opacity-disabled;
+    opacity: var(--opacity-secondary);
   }
 }
 </style>

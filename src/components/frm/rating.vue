@@ -26,17 +26,17 @@ const { rating } = defineProps<{ rating: number }>();
   padding: 0.3em 0.5em 0.48em;
   border-radius: 0.125em;
   font-weight: 700;
-  background-color: $color-rating-neutral;
+  background-color: var(--color-rating-neutral);
   user-select: none;
 }
 .rating_bad {
-  background-color: $color-rating-bad;
+  background-color: var(--color-rating-bad);
 }
 .rating_good {
-  background-color: $color-rating-good;
+  background-color: var(--color-rating-good);
 }
 .rating_great {
-  background: $color-rating-great;
-  color: $font-color-rating-great;
+  background: var(--color-rating-great-background);
+  color: var(--color-rating-great);
 }
 </style>

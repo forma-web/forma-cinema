@@ -177,7 +177,7 @@ $buttons-gap: 2.4rem;
 }
 
 .player__poster {
-  background-color: $background-color-primary;
+  background-color: var(--background-color-main);
 }
 
 .player__video {
@@ -188,7 +188,7 @@ $buttons-gap: 2.4rem;
   width: 100%;
   height: 100%;
   object-position: top;
-  background-color: $background-color-primary;
+  background-color: var(--background-color-main);
 }
 
 .player__background {
@@ -205,7 +205,7 @@ $buttons-gap: 2.4rem;
 }
 
 .player__progress {
-  transition: transform $animation-time $animation;
+  transition: transform var(--animation-duration) var(--animation);
   transform: translateY(6.4rem);
 }
 
@@ -215,8 +215,8 @@ $buttons-gap: 2.4rem;
   grid-auto-flow: column;
   opacity: 0;
   transform: translateY(120%);
-  transition: opacity $animation-time $animation,
-    transform $animation-time $animation;
+  transition: opacity var(--animation-duration) var(--animation),
+    transform var(--animation-duration) var(--animation);
 }
 
 .player__control {
@@ -247,7 +247,7 @@ $buttons-gap: 2.4rem;
 
 .player__video {
   object-fit: contain;
-  transition: filter $animation-time $animation;
+  transition: filter var(--animation-duration) var(--animation);
 
   &_covered {
     object-fit: cover;

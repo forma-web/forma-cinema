@@ -23,7 +23,7 @@ const { poster } = defineProps<TPreview>();
 .preview {
   width: 100%;
   overflow: hidden;
-  background-color: $background-loading-preview;
+  background-color: var(--background-color-preview);
   position: relative;
 
   &::before {
