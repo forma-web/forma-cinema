@@ -7,10 +7,13 @@ const useCollection = () => {
   const data = ref<TCollection[]>([]);
   const filtredData = ref<TCollection[]>([]);
 
+  // TODO: Refactoring: make as linked list
+
   const { height } = useWindowSize();
-  const stores = [useSelectionStore(), useGenresStore()];
+  // const stores = [useSelectionStore(), useGenresStore()];
+  const stores = [useSelectionStore()];
   const currentStoreIndex = ref<number>(0);
-  const needCollection = ref<number>(0);
+  const needCollection = ref<number>(5);
   const processedCollection = ref<number>(0);
   const isLoading = ref<boolean>(false);
   const isFinished = ref<boolean>(false);
@@ -87,11 +90,8 @@ const useCollection = () => {
     },
     { distance: height.value / 2, preserveScrollPosition: true }
   );
-
-  onMounted(() => {
-    needCollection.value = 5;
-    updateCollectionList();
-  });
+  
+  updateCollectionList();
 
   return { data: filtredData, isLoading, isFinished };
 };

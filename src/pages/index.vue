@@ -7,6 +7,7 @@ const { data, isLoading, isFinished } = useCollection();
     <CollectionBlock
       :title="collection.name"
       :movieIDs="collection.movieIDs"
+      :id="collection.id"
       v-for="collection in data"
       :key="`${collection.type}-${collection.id}`"
       one-row
