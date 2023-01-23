@@ -1,28 +1,25 @@
 import { TAuth, TAuthError } from '@/types/auth';
-import { getJWTData, setJWTToken } from '@/helpers/jwt';
+import { getJWTData, setJWTToken } from '@/utils/jwt';
 import { TAuthMeta } from '@/types/token';
-
-const config = useRuntimeConfig();
-const baseURL = `${config.public.apiURL}/auth`;
 
 export const login = (body: TLogin) =>
   useFetch<TAuth, TAuthError>('/login', {
     method: 'POST',
     body,
-    baseURL,
+    baseURL: getBaseUrl('/auth'),
   });
 
 export const register = (body: TRegister) =>
   useFetch<TAuth, TAuthError>('/register', {
     method: 'POST',
     body,
-    baseURL,
+    baseURL: getBaseUrl('/auth'),
   });
 
 export const refresh = () =>
   useFetch<TAuthMeta, TAuthError>('/refresh', {
     method: 'POST',
-    baseURL,
+    baseURL: getBaseUrl('/auth'),
     headers: {
       Accept: 'application/json',
     },
@@ -49,7 +46,7 @@ export const logout = async () => {
 
   return useFetch<null, TAuthError>('/logout', {
     method: 'POST',
-    baseURL,
+    baseURL: getBaseUrl('/auth'),
     headers: {
       Authorization: jwt,
     },

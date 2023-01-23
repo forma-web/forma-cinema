@@ -3,7 +3,6 @@ import { useScroll, useElementSize, useWindowSize } from '@vueuse/core';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
 import { vIntersectionObserver } from '@vueuse/components';
 import { ArrowUturnRightIcon } from '@heroicons/vue/24/outline';
-import { Ref } from 'nuxt/dist/app/compat/capi';
 
 type TCollectionProps = {
   id: number;

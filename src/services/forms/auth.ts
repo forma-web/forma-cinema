@@ -1,8 +1,8 @@
 import { login, register } from '@/services/api/auth';
 import { Ref } from 'nuxt/dist/app/compat/capi';
 import { SubmissionContext } from 'vee-validate';
-import { setJWTToken } from '@/helpers/jwt';
-import setFormErrors from '@/helpers/formErrors';
+import { setJWTToken } from '@/utils/jwt';
+import setFormErrors from '@/utils/formErrors';
 import { TAuth, TAuthError } from '@/types/auth';
 import { AsyncData } from 'nuxt/dist/app/composables';
 import { useUserStore } from '@/stores/user';
@@ -23,7 +23,7 @@ const onAuth =
       const { data: userData, meta } = data.value;
       const store = useUserStore();
       store.setUserData(userData);
-      
+
       setJWTToken(meta);
       await navigateTo('/');
     } else if (error.value) {

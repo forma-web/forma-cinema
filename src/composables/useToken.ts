@@ -1,4 +1,4 @@
-import { getJWTToken } from '@/helpers/jwt';
+import { getJWTToken } from '@/utils/jwt';
 
 const useToken = async () => {
   const jwtToken = await getJWTToken();
