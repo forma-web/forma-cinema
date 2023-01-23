@@ -1,54 +1,46 @@
-import { TAuth, TAuthError } from '@/types/auth';
-import { getJWTData, setJWTToken } from '@/utils/jwt';
-import { TAuthMeta } from '@/types/token';
+import { TAuth, TAuthError, TMetaResponse } from '@/types/auth';
+import { getJWTData } from '@/utils/jwt';
+
+const authFetch = useApiFetch('/auth');
 
 export const login = (body: TLogin) =>
-  useFetch<TAuth, TAuthError>('/login', {
-    method: 'POST',
-    body,
-    baseURL: getBaseUrl('/auth'),
-  });
+  authFetch<TAuth, TAuthError>(
+    '/login',
+    {
+      method: 'POST',
+      body,
+    },
+    false
+  );
 
 export const register = (body: TRegister) =>
-  useFetch<TAuth, TAuthError>('/register', {
-    method: 'POST',
-    body,
-    baseURL: getBaseUrl('/auth'),
-  });
+  authFetch<TAuth, TAuthError>(
+    '/register',
+    {
+      method: 'POST',
+      body,
+    },
+    false
+  );
 
 export const refresh = () =>
-  useFetch<TAuthMeta, TAuthError>('/refresh', {
+  authFetch<TMetaResponse, TAuthError>(
+    '/refresh',
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+      },
+
+      onRequest({ options }) {
+        options.headers = (options.headers as Record<string, string>) || {};
+        options.headers.authorization = String(getJWTData()?.jwt);
+      },
+    },
+    false
+  );
+
+export const logout = async () =>
+  authFetch<null, TAuthError>('/logout', {
     method: 'POST',
-    baseURL: getBaseUrl('/auth'),
-    headers: {
-      Accept: 'application/json',
-    },
-
-    onRequest({ options }) {
-      options.headers = (options.headers as Record<string, string>) || {};
-      options.headers.authorization = String(getJWTData()?.jwt);
-    },
-
-    onResponse({ response }) {
-      if (response._data?.meta) setJWTToken(response._data.meta);
-    },
-
-    // onResponseError() {
-    //   console.log('refresh error');
-
-    //   setJWTToken(null);
-    // },
   });
-
-export const logout = async () => {
-  const jwt = await useToken();
-  if (!jwt) return null;
-
-  return useFetch<null, TAuthError>('/logout', {
-    method: 'POST',
-    baseURL: getBaseUrl('/auth'),
-    headers: {
-      Authorization: jwt,
-    },
-  });
-};
