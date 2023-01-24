@@ -114,7 +114,10 @@ const createCollectionStore =
       return newMovieIDs.sort();
     };
 
-    const getLastestCollectionMovieIDs = async (id: number, amount: number) => {
+    const getLastestCollectionMovieIDs = async (
+      id: number,
+      amount?: number
+    ) => {
       if (!data.value[id] && !(await getCollection(id))) return null;
 
       while (

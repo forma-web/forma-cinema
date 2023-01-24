@@ -5,10 +5,11 @@ import { vIntersectionObserver } from '@vueuse/components';
 import { ArrowUturnRightIcon } from '@heroicons/vue/24/outline';
 
 type TCollectionProps = {
-  id: number;
+  id?: number;
   title?: string;
   movieIDs: number[];
   oneRow?: boolean;
+  redirectToCollection?: boolean;
 };
 
 const root = ref<HTMLElement | null>(null);
@@ -32,9 +33,10 @@ const { id, title, movieIDs, oneRow } = defineProps<TCollectionProps>();
 
 <template>
   <div class="block">
-    <NuxtLink :to="`/selections/${id}`">
+    <NuxtLink :to="`/selections/${id}`" v-if="redirectToCollection && id">
       <h3 class="title" v-if="title">{{ title }}</h3>
     </NuxtLink>
+    <h3 class="title" v-else-if="title">{{ title }}</h3>
     <section class="carousel">
       <ul class="list" :class="{ 'list_one-row': oneRow }" ref="root">
         <li
@@ -50,7 +52,7 @@ const { id, title, movieIDs, oneRow } = defineProps<TCollectionProps>();
             <CollectionItem :key="movieID" :movieID="movieID" />
           </NuxtLink>
         </li>
-        <li class="item">
+        <li class="item" v-if="redirectToCollection && id">
           <NuxtLink :to="`/selections/${id}`">
             <button class="list__link">
               <ArrowUturnRightIcon class="list__link-icon" />
