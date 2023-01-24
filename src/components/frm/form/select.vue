@@ -180,14 +180,14 @@ const isActiveOption = (option: string | number) => {
     display: flex;
     flex-direction: column;
     width: 100%;
-    border: $border-line $font-color-primary;
+    border: var(--border-line) var(--color-primary);
     border-top: none;
-    border-bottom-left-radius: $border-radius;
-    border-bottom-right-radius: $border-radius;
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
   }
 
   &__options {
-    max-height: calc($height-select * $count-options);
+    max-height: calc(var(--height-select) * var(--count-options));
     overflow-x: hidden;
     overflow-y: auto;
   }
@@ -196,7 +196,7 @@ const isActiveOption = (option: string | number) => {
     .field_select {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
-      border-color: $font-color-primary;
+      border-color: var(--color-primary);
     }
   }
 
@@ -209,7 +209,7 @@ const isActiveOption = (option: string | number) => {
 
   &_fill {
     .field_select {
-      color: $font-color-primary;
+      color: var(--color-primary);
     }
   }
 }
@@ -223,7 +223,7 @@ const isActiveOption = (option: string | number) => {
     width: 100%;
     position: relative;
     display: inline-flex;
-    border-bottom: $border-line $input-color;
+    border-bottom: var(--border-line) var(--color-input);
 
     &_empty .option {
       opacity: 0.36;

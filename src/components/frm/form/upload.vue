@@ -21,10 +21,10 @@ import { ArrowUpTrayIcon } from '@heroicons/vue/24/solid';
 .upload {
   width: 100%;
   overflow: hidden;
-  background-color: change-color($background-profile, $alpha: 0.6);
-  border-radius: $border-radius;
+  background-color: var(--color-secondary-2);
+  border-radius: var(--border-radius);
   position: relative;
-  transition: background-color $animation-time;
+  transition: background-color var(--animation-duration);
 
   &::before {
     content: '';
@@ -48,7 +48,7 @@ import { ArrowUpTrayIcon } from '@heroicons/vue/24/solid';
   &__icon {
     width: 3.8em;
     height: 3.8em;
-    color: $font-color-primary;
+    color: var(--color-primary);
   }
 
   &__text {
@@ -63,11 +63,11 @@ import { ArrowUpTrayIcon } from '@heroicons/vue/24/solid';
   &__title {
     font-size: 1.8rem;
     font-weight: 500;
-    color: $font-color-primary;
+    color: var(--color-primary);
   }
 
   &__description {
-    color: $font-color-description;
+    color: var(--color-secondary);
   }
 }
 </style>

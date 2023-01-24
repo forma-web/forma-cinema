@@ -10,7 +10,7 @@ const { error } = defineProps<{ error: string }>();
 
 <style scoped lang="scss">
 .error {
-  color: $error-color;
+  color: var(--color-error);
   font-size: 1.4rem;
   margin-bottom: 0.4em;
 }

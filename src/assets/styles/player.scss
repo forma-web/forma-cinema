@@ -1,5 +1,5 @@
-$progress-bar-bg: change-color($font-color-description, $alpha: 0.12);
-$progress-line-bg: change-color($font-color-description, $alpha: 0.8);
+$progress-bar-bg: var(--color-secondary-1);
+$progress-line-bg: var(--color-secondary-8);
 $progress-bar-height: 0.4rem;
 $progress-container-height: calc($progress-bar-height * 3);
 $progress-bar-hovered-height: calc($progress-bar-height * 1.5);
@@ -15,7 +15,7 @@ $progress-bar-hovered-height: calc($progress-bar-height * 1.5);
 .progress-bar {
   position: relative;
   height: $progress-bar-height;
-  transition: height $animation-time ease;
+  transition: height var(--animation-duration) ease;
   width: 100%;
   background-color: $progress-bar-bg;
   will-change: height;
@@ -34,7 +34,7 @@ $progress-bar-hovered-height: calc($progress-bar-height * 1.5);
 
   &__loaded {
     background-color: $progress-bar-bg;
-    transition: transform $animation-time ease;
+    transition: transform var(--animation-duration) ease;
   }
 
   &__hovered {
@@ -53,7 +53,7 @@ $progress-bar-hovered-height: calc($progress-bar-height * 1.5);
 
   &__point-container {
     position: absolute;
-    top: - $progress-bar-height;
+    top: -$progress-bar-height;
     left: calc($progress-container-height / -2);
     will-change: translateX;
   }
@@ -61,7 +61,7 @@ $progress-bar-hovered-height: calc($progress-bar-height * 1.5);
   &__point {
     scale: 0;
     border-radius: 50%;
-    transition: scale $animation-time ease;
+    transition: scale var(--animation-duration) ease;
     background-color: white;
     will-change: scale;
   }

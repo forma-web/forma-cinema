@@ -21,8 +21,8 @@ body,
 
 body {
   font-family: 'Resist Sans Text', Helvetica, Arial, sans-serif;
-  color: $font-color-primary;
-  background-color: $background-color-primary;
+  color: var(--color-primary);
+  background-color: var(--background-color-main);
   line-height: 1.25;
 }
 
@@ -46,23 +46,23 @@ h4 {
   width: 100%;
   min-height: 100%;
   position: relative;
-  padding: calc(2 * $padding-wrapper + $height-header) 0
-    calc($padding-wrapper * 1.5);
+  padding: calc(2 * var(--padding-wrapper) + var(--height-header)) 0
+    calc(var(--padding-wrapper) * 1.5);
   display: flex;
   flex-direction: column;
-  row-gap: $padding-wrapper * 1.12;
+  row-gap: calc(var(--padding-wrapper) * 1.12);
 }
 
 button {
   will-change: scale;
-  transition: scale $animation-time ease;
+  transition: scale var(--animation-duration) ease;
 
   &:hover {
     scale: 1.02;
   }
 
   &:active {
-    scale: $scale-down;
+    scale: var(--scale-down);
   }
 }
 
@@ -77,5 +77,5 @@ button {
   font-size: 0.875em;
   line-height: 1.5;
   font-weight: 400;
-  color: $font-color-description;
+  color: var(--color-secondary);
 }

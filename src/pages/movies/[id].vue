@@ -58,7 +58,7 @@ onBeforeMount(async () => {
   flex-direction: column;
   justify-content: flex-end;
   row-gap: 3.2rem;
-  padding: $padding-wrapper;
+  padding: var(--padding-wrapper);
 }
 
 .movie__content {
@@ -100,7 +100,7 @@ onBeforeMount(async () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: change-color($background-color-primary, $alpha: 0.68);
+  background-color: var(--background-color-main-6);
   mask-image: radial-gradient(100vw 88vh at top center, transparent, black);
   backdrop-filter: blur(1.6rem);
 }

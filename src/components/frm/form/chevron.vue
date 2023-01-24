@@ -11,7 +11,7 @@ const { isActive } = defineProps<{ isActive: boolean }>();
 <style scoped lang="scss">
 .chevron {
   width: 1.2em;
-  transition: rotate $animation-time;
+  transition: rotate var(--animation-duration);
   position: relative;
   top: 0.1em;
 

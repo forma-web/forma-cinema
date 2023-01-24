@@ -6,11 +6,14 @@ const { data, isLoading, isFinished } = useCollection();
   <div class="content">
     <CollectionBlock
       :title="collection.name"
-      :movieIDs="collection.movieIDs"
+      :movieIDs="collection.movieIDs.slice(0, 10)"
+      :id="collection.id"
+      v-for="collection in data"
       :key="`${collection.type}-${collection.id}`"
       one-row
-      v-for="collection in data"
+      redirect-to-collection
     />
+
     <div v-if="isLoading && !isFinished" class="loading">
       <FrmLoading />
     </div>

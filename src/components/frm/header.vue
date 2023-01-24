@@ -22,29 +22,29 @@ const { disabledProfile = false } = defineProps<{
   top: 0;
   left: 0;
   z-index: 2;
-  width: calc(100% - 2 * $padding-wrapper);
-  height: $height-header;
+  width: calc(100% - 2 * var(--padding-wrapper));
+  height: var(--height-header);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: $padding-wrapper;
-  padding-bottom: $padding-header;
-  border-bottom: $border-line $border-color;
+  margin: var(--padding-wrapper);
+  padding-bottom: var(--padding-header);
+  border-bottom: #{var(--border-line)} var(--color-border);
 }
 
 .header__logo {
   width: 2.4rem;
   color: white;
   opacity: 0.8;
-  transition: scale $animation-time ease;
+  transition: scale var(--animation-duration) ease;
 
   &:active {
-    scale: $scale-down;
+    scale: var(--scale-down);
   }
 }
 
 .header__item {
-  transition: opacity $animation-time ease;
+  transition: opacity var(--animation-duration) ease;
 
   &:hover {
     opacity: 1;

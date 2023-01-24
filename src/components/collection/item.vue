@@ -5,19 +5,26 @@ import { useMoviesStore } from '@/stores/movies';
 const movieStore = useMoviesStore();
 
 const movieProps = defineProps<{ movieID: number }>();
+const movie = ref<TMovie | null>();
 
-const movie = await movieStore.getMovieById(movieProps.movieID);
-const { poster, name, kinopoisk_rating } = movie ?? {};
+onMounted(async () => {
+  movie.value = await movieStore.getMovieById(movieProps.movieID);
+});
 
-const description = formatMovieDetails(String(movie?.year));
+const description = computed(() =>
+  formatMovieDetails(String(movie.value?.year))
+);
 </script>
 
 <template>
-  <article class="movie">
-    <MoviePreview :poster="poster" class="movie__preview">
-      <FrmRating :rating="kinopoisk_rating" v-if="kinopoisk_rating" />
+  <article class="movie" v-if="movie">
+    <MoviePreview :poster="movie.poster" class="movie__preview">
+      <FrmRating
+        :rating="movie.kinopoisk_rating"
+        v-if="movie.kinopoisk_rating"
+      />
     </MoviePreview>
-    <MovieInfo :name="name ?? ''" :details="description" />
+    <MovieInfo :name="movie.name ?? ''" :details="description" />
   </article>
 </template>
 
@@ -31,6 +38,6 @@ const description = formatMovieDetails(String(movie?.year));
 }
 
 .movie__preview {
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
 }
 </style>

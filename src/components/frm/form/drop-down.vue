@@ -35,15 +35,15 @@ const isActive = ref<boolean>(false);
     width: 100%;
     padding: 1em 0;
     font-size: 1.8rem;
-    border-top: $border-line $border-color;
-    color: $font-color-description;
-    transition: color $animation-time;
+    border-top: var(--border-line) var(--color-border);
+    color: var(--color-secondary);
+    transition: color var(--animation-duration);
     cursor: pointer;
 
     &:hover,
     &:active {
       scale: 1;
-      color: $font-color-primary;
+      color: var(--color-primary);
     }
   }
 }

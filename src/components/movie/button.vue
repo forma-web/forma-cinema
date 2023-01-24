@@ -20,8 +20,8 @@ const { isSmall = false, isSecondary = false } = defineProps<{
 
 <style scoped lang="scss">
 .movie__button {
-  background-color: $font-color-primary;
-  color: $background-color-primary;
+  background-color: var(--color-primary);
+  color: var(--background-color-main);
   padding: 1.2em 1.8em;
   border-radius: 100rem;
   display: flex;
@@ -31,11 +31,11 @@ const { isSmall = false, isSecondary = false } = defineProps<{
   user-select: none;
 
   &:hover {
-    scale: $scale-up;
+    scale: var(--scale-up);
   }
 
   &:active {
-    scale: $scale-down;
+    scale: var(--scale-down);
   }
 
   &_small {
@@ -45,8 +45,8 @@ const { isSmall = false, isSecondary = false } = defineProps<{
 
   &_secondary {
     font-weight: 400;
-    background-color: change-color($background-color-primary, $alpha: 0.6);
-    color: $font-color-primary;
+    background-color: var(--background-color-main-6);
+    color: var(--color-primary);
   }
 }
 </style>

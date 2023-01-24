@@ -13,17 +13,17 @@
 .field {
   width: 100%;
   border-radius: 0.8rem;
-  color: $font-color-primary;
+  color: var(--color-primary);
   font-size: 1.8rem;
   padding: 1em;
   background-color: transparent;
-  border-radius: $border-radius;
-  border: $border-line $input-color;
-  transition: border-color $animation-time;
+  border-radius: var(--border-radius);
+  border: var(--border-line) var(--color-input);
+  transition: border-color var(--animation-duration);
   outline: none;
 
   &::placeholder {
-    color: $input-placeholder-color;
+    color: var(--color-input);
   }
 
   &_textarea {
@@ -33,17 +33,17 @@
   }
 
   &:hover {
-    border-color: $font-color-description;
+    border-color: var(--color-secondary);
   }
 
   &:active,
   &:focus {
-    border-color: $font-color-primary;
+    border-color: var(--color-primary);
   }
 
   &_select {
     text-align: left;
-    color: $input-placeholder-color;
+    color: var(--color-input);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -55,17 +55,17 @@
     }
 
     &:focus {
-      color: $input-placeholder-color;
+      color: var(--color-input);
     }
   }
 
   &_error {
-    border-color: $error-color;
+    border-color: var(--color-error);
 
     &:hover,
     &:active,
     &:focus {
-      border-color: $error-color;
+      border-color: var(--color-error);
     }
   }
 }
@@ -86,6 +86,6 @@
 }
 
 .error {
-  color: $error-color;
+  color: var(--color-error);
   margin-bottom: 0.2em;
 }

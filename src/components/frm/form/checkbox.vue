@@ -14,18 +14,18 @@ const { checked } = defineProps<{ checked?: boolean }>();
 .checkbox {
   width: 1.6rem;
   height: 1.6rem;
-  border: $border-line $input-color;
+  border: var(--border-line) var(--color-input);
   border-radius: 0.2em;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  color: $background-color-primary;
+  color: var(--background-color-main);
 
   &_checked {
-    border-color: $font-color-primary;
-    background-color: $font-color-primary;
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
   }
 }
 </style>

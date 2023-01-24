@@ -1,11 +1,6 @@
 import { TAuthMeta } from './token';
 import { TUser } from './user';
 
-export type TAuth = {
-  data: TUser;
-  meta: TAuthMeta;
-};
-
 export type TAuthError = {
   data?: {
     message?: string;
@@ -16,3 +11,9 @@ export type TAuthError = {
 export type TUserResponse = {
   data: TUser;
 };
+
+export type TMetaResponse = {
+  meta: TAuthMeta;
+};
+
+export type TAuth = TUserResponse & TMetaResponse;

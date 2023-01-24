@@ -55,12 +55,12 @@ const details = computed(() => {
   align-items: baseline;
   column-gap: 1.6em;
   padding: 1.2em 0;
-  border-bottom: $border-line $border-color;
+  border-bottom: var(--border-line) var(--color-border);
 }
 
 .detail__type {
   width: 10em;
-  color: $font-color-description;
+  color: var(--color-secondary);
 }
 
 .detail__value {

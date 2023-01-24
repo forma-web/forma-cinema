@@ -5,12 +5,12 @@
 
 .v-enter-active,
 .v-leave-active {
-  transition: opacity $animation-time $animation;
+  transition: opacity var(--animation-duration) var(--animation);
 }
 
 .player-enter-active,
 .player-leave-active {
-  transition: opacity calc($animation-time * 2) ease;
+  transition: opacity calc(var(--animation-duration) * 2) ease;
 }
 
 .movie-leave-active {

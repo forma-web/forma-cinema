@@ -55,8 +55,9 @@ const emit = defineEmits(['change']);
     align-items: center;
     justify-content: space-between;
     column-gap: 0.8em;
-    height: $height-select;
-    transition: scale $animation-time, opacity $animation-time;
+    height: var(--height-select);
+    transition: scale var(--animation-duration),
+      opacity var(--animation-duration);
 
     &:hover {
       scale: 1.01;
@@ -78,12 +79,12 @@ const emit = defineEmits(['change']);
   }
 
   &_active {
-    background-color: change-color($input-color, $alpha: 0.2);
+    background-color: var(--color-secondary-1);
   }
 
   &:hover,
   &:active {
-    background-color: $input-color;
+    background-color: var(--color-input);
     scale: none;
   }
 

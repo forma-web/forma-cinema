@@ -94,7 +94,7 @@ onMounted(async () => {
 <style scoped lang="scss">
 .movie-form {
   width: 100%;
-  padding: $padding-wrapper;
+  padding: var(--padding-wrapper);
   align-self: center;
   justify-content: center;
   display: flex;
@@ -103,7 +103,7 @@ onMounted(async () => {
 
 .movie-form__mediadata,
 .mediadata__fieldset {
-  width: $width-column;
+  width: var(--width-columns);
   display: flex;
   flex-direction: column;
   row-gap: 4em;
@@ -115,6 +115,6 @@ onMounted(async () => {
 }
 
 .movie-form__content {
-  width: calc($width-column * 2 + 1.6rem);
+  width: calc(var(--width-columns) * 2 + 1.6rem);
 }
 </style>

@@ -31,6 +31,6 @@ const { name } = defineProps<{ name: string }>();
   transform: translateY(-50%);
   width: 1.5em;
   height: 1.5em;
-  color: $input-color;
+  color: var(--color-input);
 }
 </style>

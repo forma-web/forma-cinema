@@ -28,9 +28,9 @@ $padding: 1.2em;
 .profile-control {
   position: absolute;
   right: 0%;
-  top: calc(100% + $padding-header * 0.4);
-  background-color: $background-profile;
-  border-radius: $border-radius;
+  top: calc(100% + var(--padding-header) * 0.4);
+  background-color: var(--background-secondary);
+  border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;
   width: 14em;
@@ -51,7 +51,7 @@ $padding: 1.2em;
   }
 
   &__buttons-list {
-    border-top: $border-line $border-color;
+    border-top: var(--border-line) var(--color-border);
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -62,14 +62,15 @@ $padding: 1.2em;
     padding: calc($padding * 0.75) $padding;
     font-size: 0.875em;
     opacity: 0.6;
-    transition: opacity $animation-time, scale $animation-time;
+    transition: opacity var(--animation-duration),
+      scale var(--animation-duration);
 
     &:hover {
       opacity: 1;
     }
 
     &:active {
-      scale: $scale-down;
+      scale: var(--scale-down);
     }
   }
 }
