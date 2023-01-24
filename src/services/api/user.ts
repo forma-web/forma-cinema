@@ -1,17 +1,8 @@
 import { TAuthError, TUserResponse } from '@/types/auth';
 
-const config = useRuntimeConfig();
-const baseURL = `${config.public.apiURL}/user`;
+const userFetch = useApiFetch('/user');
 
-export const currentUser = async () => {
-  const jwt = await useToken();
-  if (!jwt) return null;
-
-  return useFetch<TUserResponse, TAuthError>('/', {
+export const currentUser = async () =>
+  userFetch<TUserResponse, TAuthError>('/', {
     method: 'GET',
-    baseURL,
-    headers: {
-      Authorization: jwt,
-    },
   });
-};

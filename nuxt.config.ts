@@ -17,16 +17,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiURL: 'http://92.125.33.134:8888/api',
-    },
-  },
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: '@use "@/assets/styles/_variables.scss" as *;',
-        },
-      },
+      apiURL: 'http://92.125.33.134:3000/api',
     },
   },
   css: ['@/assets/styles/main.scss'],

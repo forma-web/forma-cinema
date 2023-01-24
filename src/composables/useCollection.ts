@@ -5,14 +5,15 @@ import { COLLECTION_ITEMS_PER_PAGE } from '@/constants/collection';
 
 const useCollection = () => {
   const data = ref<TCollection[]>([]);
-  const filteredCollections = computed(() =>
-    data.value.filter((collection) => collection.movieIDs.length > 0)
-  );
+  const filtredData = ref<TCollection[]>([]);
+
+  // TODO: Refactoring: make as linked list
 
   const { height } = useWindowSize();
-  const stores = [useSelectionStore(), useGenresStore()];
+  // const stores = [useSelectionStore(), useGenresStore()];
+  const stores = [useSelectionStore()];
   const currentStoreIndex = ref<number>(0);
-  const needCollection = ref<number>(0);
+  const needCollection = ref<number>(5);
   const processedCollection = ref<number>(0);
   const isLoading = ref<boolean>(false);
   const isFinished = ref<boolean>(false);
@@ -44,7 +45,7 @@ const useCollection = () => {
     }
 
     while (
-      needCollection.value > processedCollection.value &&
+      needCollection.value > filtredData.value.length &&
       !isFinished.value
     ) {
       if (processedCollection.value === data.value.length) {
@@ -62,7 +63,6 @@ const useCollection = () => {
       }
 
       const collection = data.value[processedCollection.value];
-
       const store = stores[currentStoreIndex.value];
 
       if (collection?.movieIDs.length < COLLECTION_ITEMS_PER_PAGE) {
@@ -74,6 +74,8 @@ const useCollection = () => {
         data.value[processedCollection.value].movieIDs = movieIDs;
       }
 
+      if (data.value[processedCollection.value].movieIDs.length > 0)
+        filtredData.value.push(data.value[processedCollection.value]);
       processedCollection.value++;
     }
 
@@ -88,13 +90,10 @@ const useCollection = () => {
     },
     { distance: height.value / 2, preserveScrollPosition: true }
   );
+  
+  updateCollectionList();
 
-  onMounted(() => {
-    needCollection.value = 5;
-    updateCollectionList();
-  });
-
-  return { data: filteredCollections, isLoading, isFinished };
+  return { data: filtredData, isLoading, isFinished };
 };
 
 export default useCollection;

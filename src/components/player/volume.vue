@@ -75,7 +75,7 @@ $volume-bar-height: 10rem;
   align-items: center;
   position: relative;
   overflow: hidden;
-  transition: width $animation-time $animation;
+  transition: width var(--animation-duration) var(--animation);
 }
 
 .volume__bar-container {

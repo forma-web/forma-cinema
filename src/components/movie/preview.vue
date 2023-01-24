@@ -1,16 +1,22 @@
 <script setup lang="ts">
+import { useImage } from '@vueuse/core';
+
 type TPreview = {
   poster?: string;
 };
 
 const { poster } = defineProps<TPreview>();
+
+const { isLoading } = useImage({ src: poster ?? '' });
 </script>
 
 <template>
   <div class="preview">
     <div class="preview__content">
       <div class="background-container">
-        <img class="background" loading="lazy" v-if="poster" :src="poster" />
+        <Transition>
+          <img class="background" v-show="!isLoading" :src="poster" />
+        </Transition>
       </div>
       <div class="icons">
         <slot></slot>
@@ -23,7 +29,7 @@ const { poster } = defineProps<TPreview>();
 .preview {
   width: 100%;
   overflow: hidden;
-  background-color: $background-loading-preview;
+  background-color: var(--background-color-preview);
   position: relative;
 
   &::before {

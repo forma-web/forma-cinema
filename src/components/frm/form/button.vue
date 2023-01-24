@@ -16,19 +16,19 @@ const { isSeconadary } = defineProps<{
 <style scoped lang="scss">
 .button {
   width: 100%;
-  border-radius: 0.8rem;
-  color: $font-color-primary;
+  border-radius: var(--border-radius);
+  color: var(--color-primary);
   font-size: 1.8rem;
   padding: 1em 2em;
 
   &_primary {
-    background-color: $font-color-primary;
-    color: $background-color-primary;
+    background-color: var(--color-primary);
+    color: var(--background-color-main);
   }
 
   &_secondary {
-    color: $font-color-description;
-    border: $border-line $border-color;
+    color: var(--color-secondary);
+    border: var(--border-line) var(--color-border);
   }
 }
 </style>

@@ -1,6 +1,6 @@
 import { logout } from '@/services/api/auth';
 import { TUser } from '@/types/user';
-import { deleteJWTToken } from '@/helpers/jwt';
+import { deleteJWTToken } from '@/utils/jwt';
 import { currentUser } from '@/services/api/user';
 import { useMoviesStore } from './movies';
 import { useGenresStore } from './genres';
