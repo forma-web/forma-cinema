@@ -1,3 +1,5 @@
+import { EMoviesMode } from '@/constants/movies';
+
 export type TCollection = {
   id: number;
   type: string;
@@ -15,4 +17,8 @@ export type TCollectionStore = {
 
 export type TCollectionRequestParams = {
   cursor?: string | null;
+};
+
+export type TMoviesRequestModeParams = {
+  mode?: EMoviesMode.DRAFT | EMoviesMode.PUBLISHED;
 };
