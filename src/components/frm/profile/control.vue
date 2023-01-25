@@ -13,6 +13,9 @@ const store = useUserStore();
       </div>
     </div>
     <div class="profile-control__buttons-list">
+      <NuxtLink to="/movies" class="profile-control__button button_no-scaled">
+        Все фильмы
+      </NuxtLink>
       <button
         class="profile-control__button button_no-scaled"
         @click="store.logoutUser"
@@ -54,12 +57,13 @@ $padding: 1.2em;
     border-top: var(--border-line) var(--color-border);
     width: 100%;
     display: flex;
+    padding: calc($padding * 0.25) 0;
     flex-direction: column;
   }
 
   &__button {
     text-align: left;
-    padding: calc($padding * 0.75) $padding;
+    padding: calc($padding * 0.5) $padding;
     font-size: 0.875em;
     opacity: 0.6;
     transition: opacity var(--animation-duration),

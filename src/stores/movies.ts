@@ -3,7 +3,6 @@ import { movieById } from '@/services/api/movies';
 
 export const useMoviesStore = defineStore('moviesStore', () => {
   const data = ref<Record<number, TMovie>>({});
-
   const setMovie = (movie: TMovie) => (data.value[movie.id] = movie);
 
   const getMovieById = async (id: number) => {
